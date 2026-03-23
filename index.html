@@ -2,155 +2,253 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>HYGIE® TRACKER</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&display=swap');
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html,body{background:#d4d0c8;color:#111;font-family:'IBM Plex Mono',monospace;min-height:100vh;}
+
+/* ── WIN98 PRIMITIVES ── */
+.win-raised{border-top:2px solid #fff;border-left:2px solid #fff;border-right:2px solid #808080;border-bottom:2px solid #808080;}
+.win-sunken{border-top:2px solid #808080;border-left:2px solid #808080;border-right:2px solid #fff;border-bottom:2px solid #fff;}
+.win-inset{border-top:1px solid #808080;border-left:1px solid #808080;border-right:1px solid #fff;border-bottom:1px solid #fff;}
+.win-outset{border-top:1px solid #fff;border-left:1px solid #fff;border-right:1px solid #808080;border-bottom:1px solid #808080;}
+
+/* ── HEADER ── */
 .hdr{position:sticky;top:0;z-index:100;}
 .title-bar{background:linear-gradient(90deg,#3b23a8,#6b5fd4);padding:7px 12px;display:flex;align-items:center;justify-content:space-between;}
 .app-name{color:#fff;font-size:13px;font-weight:700;letter-spacing:3px;}
-.app-pct{color:rgba(255,255,255,.85);font-size:10px;letter-spacing:2px;}
-.wm-bar{background:linear-gradient(90deg,#3b23a8,#6b5fd4);padding:3px 10px;}
-.wm-bar-t{color:#fff;font-size:9px;letter-spacing:2px;text-transform:uppercase;}
-.wm-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;padding:5px;background:#d4d0c8;border-bottom:2px solid #808080;}
-.wmc{background:#e8e4dc;border-top:1px solid #fff;border-left:1px solid #fff;border-right:1px solid #808080;border-bottom:1px solid #808080;padding:4px 2px;text-align:center;cursor:pointer;}
-.wmc.today{background:#3b23a8;}
-.wmc.today .wmd,.wmc.today .wmn{color:#fff;}
-.wmd{font-size:7px;letter-spacing:1px;text-transform:uppercase;color:#666;display:block;}
-.wmn{font-size:13px;font-weight:700;color:#000;display:block;margin-top:1px;}
-.wmdots{display:flex;justify-content:center;gap:2px;margin-top:3px;}
-.wmdot{width:4px;height:4px;border-radius:50%;background:#aaa;}
-.wmdot.ok{background:#fff;}
-.wmc.today .wmdot{background:rgba(255,255,255,.4);}
-.wmc.today .wmdot.ok{background:#fff;}
-.daynav{background:#d4d0c8;border-bottom:2px solid #808080;padding:8px 12px;display:flex;align-items:center;gap:10px;}
-.arr{width:36px;height:30px;background:#e8e4dc;border-top:2px solid #fff;border-left:2px solid #fff;border-right:2px solid #808080;border-bottom:2px solid #808080;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;flex-shrink:0;font-weight:700;}
+.app-meta{color:rgba(255,255,255,.85);font-size:9px;letter-spacing:2px;text-align:right;line-height:1.6;cursor:pointer;text-decoration:underline dotted rgba(255,255,255,.4);}
+
+/* ── WEEK NAV ── */
+.week-nav{background:#d4d0c8;border-bottom:2px solid #808080;padding:6px 10px;display:flex;align-items:center;gap:8px;}
+.arr{width:34px;height:28px;background:#e8e4dc;border-top:2px solid #fff;border-left:2px solid #fff;border-right:2px solid #808080;border-bottom:2px solid #808080;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;flex-shrink:0;font-weight:700;user-select:none;}
 .arr:active{border-top:2px solid #808080;border-left:2px solid #808080;border-right:2px solid #fff;border-bottom:2px solid #fff;}
-.dayinfo{flex:1;text-align:center;}
-.dayname{font-size:17px;font-weight:700;letter-spacing:3px;display:block;}
-.daydate{font-size:10px;letter-spacing:2px;color:#666;display:block;margin-top:2px;}
-.progsec{background:#d4d0c8;padding:6px 12px 8px;border-bottom:1px solid #808080;}
-.proglbl{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#666;margin-bottom:4px;display:flex;justify-content:space-between;}
-.progout{background:#a8a4a0;height:12px;border-top:1px solid #808080;border-left:1px solid #808080;border-right:1px solid #fff;border-bottom:1px solid #fff;overflow:hidden;}
-.progin{height:100%;background:linear-gradient(90deg,#3b23a8,#6b5fd4);transition:width .3s;}
+.week-info{flex:1;text-align:center;}
+.week-label{font-size:14px;font-weight:700;letter-spacing:1px;display:block;}
+.week-dates{font-size:8px;letter-spacing:1px;color:#666;display:block;margin-top:1px;}
+
+/* ── GLOBAL PROGRESS BAR ── */
+.gbar-wrap{background:#d4d0c8;padding:5px 10px 7px;border-bottom:1px solid #808080;}
+.gbar-labels{display:flex;justify-content:space-between;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:#666;margin-bottom:3px;}
+.gbar-pct-big{font-size:18px;font-weight:700;color:#3b23a8;letter-spacing:1px;}
+.gbar-pct-lbl{font-size:7px;letter-spacing:2px;text-transform:uppercase;color:#888;margin-top:1px;}
+.gbar-out{background:#a8a4a0;height:10px;border-top:1px solid #808080;border-left:1px solid #808080;border-right:1px solid #fff;border-bottom:1px solid #fff;overflow:hidden;}
+.gbar-in{height:100%;background:linear-gradient(90deg,#3b23a8,#6b5fd4);transition:width .4s;}
+.gbar-in.perfect{background:linear-gradient(90deg,#005533,#00aa66);}
+
+/* ── CONTENT ── */
 .content{padding:8px;padding-bottom:80px;}
-.vbar{padding:5px 10px;display:flex;align-items:center;justify-content:space-between;}
-.vbar-t{color:#fff;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;}
-.sg{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;padding:10px;background:#e8e4dc;}
-.sb{background:#d4d0c8;border-top:1px solid #808080;border-left:1px solid #808080;border-right:1px solid #fff;border-bottom:1px solid #fff;padding:8px 4px;text-align:center;}
-.sv{font-size:20px;font-weight:700;line-height:1;color:#3b23a8;}
-.sl{font-size:7px;letter-spacing:2px;text-transform:uppercase;color:#666;margin-top:3px;}
-.sess{margin-bottom:8px;border-top:2px solid #fff;border-left:2px solid #fff;border-right:2px solid #808080;border-bottom:2px solid #808080;}
-.sess-bar{padding:5px 8px;display:flex;align-items:center;justify-content:space-between;}
-.sess-bar-l{color:#fff;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;pointer-events:none;}
-.stats-btn{background:rgba(255,255,255,.3);border:1px solid rgba(255,255,255,.6);color:#fff;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;cursor:pointer;min-width:60px;min-height:26px;display:flex;align-items:center;justify-content:center;}
-.t-halte .sess-bar{background:linear-gradient(90deg,#7a5500,#c9a020);}
-.t-force .sess-bar{background:linear-gradient(90deg,#7a2000,#dd5522);}
-.t-zone2 .sess-bar{background:linear-gradient(90deg,#1a0870,#6b5fd4);}
-.t-gym .sess-bar{background:linear-gradient(90deg,#3a0870,#8b2fc9);}
-.t-wod .sess-bar{background:linear-gradient(90deg,#550000,#cc2200);}
-.t-mob .sess-bar{background:linear-gradient(90deg,#002810,#007744);}
-.sess-body{background:#e8e4dc;padding:12px;display:flex;align-items:center;gap:12px;cursor:pointer;}
-.sess-body:active{background:#c8c4bc;}
-.sess.checked .sess-body{background:#d0ccc4;}
-.sess.checked .sess-title{text-decoration:line-through;color:#999;}
-.sess-info{flex:1;}
-.sess-tag{display:inline-block;font-size:8px;letter-spacing:2px;text-transform:uppercase;background:#d4d0c8;border-top:1px solid #808080;border-left:1px solid #808080;border-right:1px solid #fff;border-bottom:1px solid #fff;padding:2px 7px;color:#666;margin-bottom:7px;}
-.sess-title{font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#000;margin-bottom:4px;line-height:1.2;}
-.sess-detail{font-size:10px;color:#666;line-height:1.5;}
-.chk{width:22px;height:22px;background:#fff;border-top:2px solid #808080;border-left:2px solid #808080;border-right:2px solid #fff;border-bottom:2px solid #fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+
+/* ── WEEK SUMMARY GRID ── */
+.wsummary{background:#e8e4dc;border-top:2px solid #fff;border-left:2px solid #fff;border-right:2px solid #808080;border-bottom:2px solid #808080;margin-bottom:10px;}
+.wsummary-bar{background:linear-gradient(90deg,#3b23a8,#6b5fd4);padding:5px 10px;display:flex;align-items:center;justify-content:space-between;}
+.wsummary-bar span{color:#fff;font-size:10px;font-weight:700;letter-spacing:2px;}
+.wsummary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#808080;border-top:1px solid #808080;}
+.wstat{background:#e8e4dc;padding:8px 4px;text-align:center;}
+.wstat-val{font-size:18px;font-weight:700;line-height:1;}
+.wstat-lbl{font-size:7px;letter-spacing:1.5px;text-transform:uppercase;color:#666;margin-top:3px;}
+.wstat-sub{font-size:7px;color:#aaa;margin-top:1px;}
+
+/* ── SECTION HEADER ── */
+.sec-hd{padding:5px 10px;display:flex;align-items:center;justify-content:space-between;margin-top:2px;}
+.sec-hd-t{color:#fff;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;}
+.sec-hd-badge{background:rgba(255,255,255,.25);border:1px solid rgba(255,255,255,.5);color:#fff;font-size:9px;font-weight:700;padding:2px 8px;letter-spacing:1px;}
+.sec-hd-badge.ok{background:rgba(255,255,255,.4);}
+
+/* ── BLOCK CARDS ── */
+.block-wrap{background:#e8e4dc;border-top:2px solid #fff;border-left:2px solid #fff;border-right:2px solid #808080;border-bottom:2px solid #808080;margin-bottom:8px;}
+.block{display:flex;align-items:center;gap:10px;padding:11px 12px;cursor:pointer;user-select:none;}
+.block:active{background:#d8d4cc;}
+.block.done{background:#d0ccc4;}
+.block-icon{font-size:20px;flex-shrink:0;width:28px;text-align:center;}
+.block-info{flex:1;}
+.block-title{font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#000;line-height:1.2;}
+.block.done .block-title{text-decoration:line-through;color:#999;}
+.block-sub{font-size:9px;color:#666;letter-spacing:.5px;margin-top:3px;line-height:1.5;}
+.block-chk{width:24px;height:24px;background:#fff;border-top:2px solid #808080;border-left:2px solid #808080;border-right:2px solid #fff;border-bottom:2px solid #fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .chkmark{font-size:16px;font-weight:700;color:#3b23a8;display:none;}
-.sess.checked .chkmark{display:block;}
-.repos-body{background:#e8e4dc;padding:24px;text-align:center;}
-.repos-l{font-size:14px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#aaa;}
-.repos-s{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#bbb;margin-top:8px;}
-.rule-body{background:#e8e4dc;padding:10px 12px;}
-.rule-txt{font-size:9px;color:#666;line-height:1.7;}
-/* MODAL */
-.moverlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:600;display:flex;align-items:flex-end;}
+.block.done .chkmark{display:block;}
+
+/* Alternate colors per type */
+.btype-halte .sec-hd{background:linear-gradient(90deg,#7a5500,#c9a020);}
+.btype-force .sec-hd{background:linear-gradient(90deg,#7a2000,#dd5522);}
+.btype-zone2 .sec-hd{background:linear-gradient(90deg,#1a0870,#6b5fd4);}
+.btype-wod   .sec-hd{background:linear-gradient(90deg,#550000,#cc2200);}
+
+/* ── ZONE 2 SPECIAL BLOCKS ── */
+.z2-block{padding:10px 12px;background:#e8e4dc;}
+.z2-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.z2-row:last-child{margin-bottom:0;}
+.z2-num{width:20px;height:20px;background:#3b23a8;color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.z2-done-row{display:flex;align-items:center;gap:8px;flex:1;}
+.z2-time-display{flex:1;font-size:13px;font-weight:700;color:#3b23a8;letter-spacing:1px;}
+.z2-time-display.empty{color:#bbb;font-size:10px;font-weight:400;}
+.z2-btns{display:flex;gap:4px;}
+.z2-edit-btn{background:#d4d0c8;border-top:1px solid #fff;border-left:1px solid #fff;border-right:1px solid #808080;border-bottom:1px solid #808080;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;padding:4px 8px;cursor:pointer;color:#333;letter-spacing:1px;}
+.z2-edit-btn:active{border-top:1px solid #808080;border-left:1px solid #808080;border-right:1px solid #fff;border-bottom:1px solid #fff;}
+.z2-del-btn{background:#d4d0c8;border-top:1px solid #fff;border-left:1px solid #fff;border-right:1px solid #808080;border-bottom:1px solid #808080;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;padding:4px 7px;cursor:pointer;color:#880000;}
+.z2-del-btn:active{border-top:1px solid #808080;border-left:1px solid #808080;border-right:1px solid #fff;border-bottom:1px solid #fff;}
+.z2-input-row{display:flex;gap:6px;align-items:center;flex:1;}
+.z2-input{width:70px;background:#fff;border-top:2px solid #808080;border-left:2px solid #808080;border-right:2px solid #fff;border-bottom:2px solid #fff;font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:700;color:#3b23a8;padding:4px 6px;text-align:center;}
+.z2-input-lbl{font-size:9px;color:#666;letter-spacing:1px;}
+.z2-save-btn{background:#3b23a8;border-top:1px solid #6b5fd4;border-left:1px solid #6b5fd4;border-right:1px solid #1a0a60;border-bottom:1px solid #1a0a60;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:1px;padding:5px 10px;cursor:pointer;color:#fff;}
+.z2-save-btn:active{border-top:1px solid #1a0a60;border-left:1px solid #1a0a60;border-right:1px solid #6b5fd4;border-bottom:1px solid #6b5fd4;}
+.z2-total-bar{background:#d4d0c8;border-top:1px solid #808080;padding:7px 12px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.z2-total-txt{font-size:10px;font-weight:700;letter-spacing:1px;color:#3b23a8;}
+.z2-pbar-out{flex:1;background:#a8a4a0;height:8px;border-top:1px solid #808080;border-left:1px solid #808080;border-right:1px solid #fff;border-bottom:1px solid #fff;overflow:hidden;}
+.z2-pbar-in{height:100%;background:linear-gradient(90deg,#3b23a8,#6b5fd4);transition:width .3s;}
+.z2-pbar-in.complete{background:linear-gradient(90deg,#005533,#00aa66);}
+
+/* ── HISTORY HEATMAP (dans modal) ── */
+.heat-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:2px;margin-top:6px;}
+.heat-cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:700;}
+.heat-0{background:#d8d4cc;color:transparent;}
+.heat-1{background:#6b5fd4;color:#fff;}
+.heat-2{background:#3b23a8;color:#fff;}
+.heat-done{background:#005533 !important;color:#fff !important;}
+
+/* ── MODAL ── */
+.moverlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:600;display:flex;align-items:flex-start;}
 .moverlay.hidden{display:none;}
-.mwin{width:100%;max-height:90vh;overflow-y:auto;background:#e8e4dc;border-top:2px solid #fff;border-left:2px solid #fff;border-right:2px solid #808080;}
+.mwin{width:100%;max-height:90vh;overflow-y:auto;background:#e8e4dc;border-top:2px solid #fff;border-left:2px solid #fff;border-right:2px solid #808080;border-bottom:2px solid #808080;}
 .mbar{padding:6px 10px;display:flex;align-items:center;justify-content:space-between;}
 .mbar-t{color:#fff;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;}
+.mclose-btn{width:20px;height:18px;background:#d4d0c8;border-top:1px solid #fff;border-left:1px solid #fff;border-right:1px solid #808080;border-bottom:1px solid #808080;font-size:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#000;font-weight:700;}
 .mbody{padding:12px;}
-.mclose-btn{width:20px;height:18px;background:#d4d0c8;border-top:1px solid #fff;border-left:1px solid #fff;border-right:1px solid #808080;border-bottom:1px solid #808080;font-size:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:700;}
-.astats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:14px;}
-.acard{background:#d4d0c8;border-top:2px solid #808080;border-left:2px solid #808080;border-right:2px solid #fff;border-bottom:2px solid #fff;padding:12px 6px;text-align:center;}
-.aval{font-size:28px;font-weight:700;line-height:1;}
-.albl{font-size:7px;letter-spacing:2px;text-transform:uppercase;color:#666;margin-top:5px;}
-.hlbl{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#666;margin:14px 0 7px;}
-.hdow{display:flex;gap:3px;margin-bottom:3px;}
-.hpad{width:20px;flex-shrink:0;}
-.hd{flex:1;text-align:center;font-size:7px;color:#666;letter-spacing:1px;}
-.hweeks{display:flex;flex-direction:column;gap:3px;}
-.hweek{display:flex;gap:3px;align-items:center;}
-.hwn{width:20px;font-size:7px;color:#666;flex-shrink:0;}
-.hdays{display:flex;gap:3px;flex:1;}
-.hday{flex:1;aspect-ratio:1;border-top:1px solid #808080;border-left:1px solid #808080;border-right:1px solid #fff;border-bottom:1px solid #fff;display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:700;color:transparent;}
-.hday.full{background:#3b23a8;color:#fff;}
-.hday.part{background:#6b5fd4;color:#fff;}
-.hday.miss{background:#b0aca4;color:#888;}
-.hday.rest{background:#cac6be;opacity:.25;}
-.hday.fut{background:#d8d4cc;}
-.hday.now{outline:2px solid #cc2200;outline-offset:-2px;}
-.plbl{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#666;margin:14px 0 7px;}
-.ppips{display:flex;flex-wrap:wrap;gap:4px;}
-.ppip{width:18px;height:18px;border-top:1px solid #808080;border-left:1px solid #808080;border-right:1px solid #fff;border-bottom:1px solid #fff;background:#ccc8c0;}
+.mclose{display:block;width:100%;background:#d4d0c8;border-top:2px solid #fff;border-left:2px solid #fff;border-right:2px solid #808080;border-bottom:2px solid #808080;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:3px;text-transform:uppercase;padding:14px;cursor:pointer;color:#000;font-weight:700;margin-top:10px;}
+
+.astats{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-bottom:12px;}
+.acard{background:#d4d0c8;border-top:2px solid #808080;border-left:2px solid #808080;border-right:2px solid #fff;border-bottom:2px solid #fff;padding:10px 4px;text-align:center;}
+.aval{font-size:24px;font-weight:700;line-height:1;}
+.albl{font-size:7px;letter-spacing:1.5px;text-transform:uppercase;color:#666;margin-top:4px;}
+
+.hlbl{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#666;margin:12px 0 5px;}
+
+/* history pips */
+.ppips{display:flex;flex-wrap:wrap;gap:3px;margin-top:4px;}
+.ppip{width:16px;height:16px;border-top:1px solid #808080;border-left:1px solid #808080;border-right:1px solid #fff;border-bottom:1px solid #fff;}
 .ppip.hit{background:#3b23a8;}
 .ppip.mis{background:#b0aca4;}
-.pleg{display:flex;gap:14px;margin-top:10px;font-size:8px;color:#666;}
-.pleg span{display:flex;align-items:center;gap:5px;}
-.pleg i{display:inline-block;width:12px;height:12px;}
-.mclose{display:block;width:100%;background:#d4d0c8;border-top:2px solid #fff;border-left:2px solid #fff;border-right:2px solid #808080;border-bottom:2px solid #808080;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:3px;text-transform:uppercase;padding:14px;cursor:pointer;color:#000;font-weight:700;margin-top:10px;}
-/* DRAWER */
-.drawer-fab{position:fixed;bottom:20px;right:16px;z-index:400;width:52px;height:52px;background:linear-gradient(135deg,#3b23a8,#6b5fd4);border-top:2px solid #8b7fe0;border-left:2px solid #8b7fe0;border-right:2px solid #1a0a60;border-bottom:2px solid #1a0a60;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;}
+.ppip.fut{background:#d8d4cc;}
+.pleg{display:flex;gap:12px;margin-top:8px;font-size:8px;color:#666;}
+.pleg span{display:flex;align-items:center;gap:4px;}
+.pleg i{display:inline-block;width:10px;height:10px;}
+
+/* ── DRAWER ── */
+.drawer-fab{position:fixed;bottom:20px;right:16px;z-index:400;width:52px;height:52px;background:linear-gradient(135deg,#3b23a8,#6b5fd4);border-top:2px solid #8b7fe0;border-left:2px solid #8b7fe0;border-right:2px solid #1a0a60;border-bottom:2px solid #1a0a60;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;color:#fff;}
 .drawer-fab:active{border-top:2px solid #1a0a60;border-left:2px solid #1a0a60;border-right:2px solid #8b7fe0;border-bottom:2px solid #8b7fe0;}
-.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:410;display:flex;align-items:stretch;}
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:410;display:flex;align-items:flex-start;}
 .drawer-overlay.hidden{display:none;}
-.drawer-win{width:100%;height:100%;overflow-y:auto;background:#d4d0c8;border:none;}
+.drawer-win{width:100%;max-height:92vh;overflow-y:auto;background:#d4d0c8;border-top:2px solid #fff;border-left:2px solid #fff;border-right:2px solid #808080;border-bottom:2px solid #808080;}
 .drawer-titlebar{background:linear-gradient(90deg,#3b23a8,#6b5fd4);padding:5px 10px;display:flex;align-items:center;justify-content:space-between;}
 .drawer-titlebar-t{color:#fff;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;}
 .drawer-close{width:20px;height:18px;background:#d4d0c8;border-top:1px solid #fff;border-left:1px solid #fff;border-right:1px solid #808080;border-bottom:1px solid #808080;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:10px;font-weight:700;}
 .dtabs{display:flex;background:#b8b4ac;border-bottom:2px solid #808080;overflow-x:auto;}
-.dtab{flex:1;min-width:56px;padding:9px 4px;font-family:'IBM Plex Mono',monospace;font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-align:center;cursor:pointer;color:#666;border:none;background:none;border-right:1px solid #808080;white-space:nowrap;}
+.dtab{flex:1;min-width:0;padding:8px 2px;font-family:'IBM Plex Mono',monospace;font-size:7px;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-align:center;cursor:pointer;color:#666;border:none;background:none;border-right:1px solid #808080;white-space:nowrap;}
 .dtab:last-child{border-right:none;}
 .dtab.active{background:#d4d0c8;color:#3b23a8;border-bottom:2px solid #d4d0c8;margin-bottom:-2px;}
 .dtool{display:none;padding:10px;}
 .dtool.active{display:block;}
+
+/* ── WIN FORM ELEMENTS ── */
 .win-input{width:100%;background:#fff;border-top:2px solid #808080;border-left:2px solid #808080;border-right:2px solid #fff;border-bottom:2px solid #fff;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#111;padding:6px 8px;}
 .win-input::placeholder{color:#aaa;}
 .win-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#555;margin-bottom:4px;margin-top:10px;display:block;}
 .win-row{display:flex;gap:6px;margin-bottom:6px;align-items:flex-end;}
-.win-btn-primary{display:block;width:100%;background:#3b23a8;border-top:2px solid #6b5fd4;border-left:2px solid #6b5fd4;border-right:2px solid #1a0a60;border-bottom:2px solid #1a0a60;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:9px 14px;cursor:pointer;color:#fff;margin-top:8px;}
+.win-btn-primary{background:#3b23a8;border-top:2px solid #6b5fd4;border-left:2px solid #6b5fd4;border-right:2px solid #1a0a60;border-bottom:2px solid #1a0a60;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:9px 14px;cursor:pointer;color:#fff;width:100%;margin-top:8px;}
 .win-btn-primary:active{border-top:2px solid #1a0a60;border-left:2px solid #1a0a60;border-right:2px solid #6b5fd4;border-bottom:2px solid #6b5fd4;}
+.sect-title{font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#3b23a8;padding:8px 0 4px;border-bottom:1px solid #aaa;margin-bottom:8px;}
+
+/* PR */
+.pr-item{display:flex;flex-direction:column;padding:7px 8px;background:#e8e4dc;border-top:1px solid #fff;border-left:1px solid #fff;border-right:1px solid #808080;border-bottom:1px solid #808080;margin-bottom:4px;}
+.pr-name{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#000;}
+.pr-val{font-size:13px;font-weight:700;color:#3b23a8;}
+.pr-date{font-size:8px;color:#888;margin-top:1px;}
+.pr-del{background:#d4d0c8;border-top:1px solid #fff;border-left:1px solid #fff;border-right:1px solid #808080;border-bottom:1px solid #808080;font-size:10px;padding:3px 7px;cursor:pointer;color:#880000;font-weight:700;}
+.pr-hist-btn{background:#d4d0c8;border-top:1px solid #fff;border-left:1px solid #fff;border-right:1px solid #808080;border-bottom:1px solid #808080;font-size:8px;padding:3px 7px;cursor:pointer;color:#3b23a8;font-weight:700;letter-spacing:1px;font-family:'IBM Plex Mono',monospace;}
+.pr-hist{background:#c8c4bc;border-top:1px solid #808080;border-left:1px solid #808080;border-right:1px solid #fff;border-bottom:1px solid #fff;padding:6px 8px;margin-bottom:4px;display:none;}
+.pr-hist.open{display:block;}
+.pr-hist-row{font-size:9px;color:#333;padding:2px 0;border-bottom:1px solid #b8b4ac;display:flex;justify-content:space-between;}
 .radio-group{display:flex;}
 .radio-btn{flex:1;padding:7px 4px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;background:#d4d0c8;border-top:2px solid #fff;border-left:2px solid #fff;border-right:1px solid #808080;border-bottom:2px solid #808080;color:#666;}
 .radio-btn:last-child{border-right:2px solid #808080;}
 .radio-btn.active{background:#3b23a8;color:#fff;border-top:2px solid #1a0a60;border-left:2px solid #1a0a60;border-right:1px solid #6b5fd4;border-bottom:2px solid #6b5fd4;}
-.sect-title{font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#3b23a8;padding:8px 0 4px;border-bottom:1px solid #aaa;margin-bottom:8px;}
-.calc-result{background:#e8e4dc;border-top:2px solid #808080;border-left:2px solid #808080;border-right:2px solid #fff;border-bottom:2px solid #fff;padding:10px 12px;margin-top:10px;}
-.calc-result-main{font-size:22px;font-weight:700;color:#3b23a8;letter-spacing:1px;}
-.calc-result-sub{font-size:10px;color:#555;margin-top:4px;line-height:1.6;}
-.pr-item{display:flex;flex-direction:column;align-items:stretch;background:#e8e4dc;border-top:1px solid #fff;border-left:1px solid #fff;border-right:1px solid #808080;border-bottom:1px solid #808080;margin-bottom:4px;padding:8px;}
-.pr-name{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#000;}
-.pr-val{font-size:13px;font-weight:700;color:#3b23a8;}
-.pr-date{font-size:8px;color:#888;letter-spacing:1px;margin-top:1px;}
-.pr-del{background:#d4d0c8;border-top:1px solid #fff;border-left:1px solid #fff;border-right:1px solid #808080;border-bottom:1px solid #808080;font-size:13px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#880000;font-weight:700;font-family:'IBM Plex Mono',monospace;}
-.pr-hist-btn{background:#d4d0c8;border-top:1px solid #fff;border-left:1px solid #fff;border-right:1px solid #808080;border-bottom:1px solid #808080;font-size:8px;padding:4px 8px;cursor:pointer;color:#3b23a8;font-weight:700;letter-spacing:1px;font-family:'IBM Plex Mono',monospace;}
-.pr-hist{background:#c8c4bc;border-top:1px solid #808080;border-left:1px solid #808080;border-right:1px solid #fff;border-bottom:1px solid #fff;padding:6px 8px;margin-top:4px;display:none;}
-.pr-hist.open{display:block;}
-.pr-hist-row{font-size:9px;color:#333;padding:2px 0;border-bottom:1px solid #b8b4ac;display:flex;justify-content:space-between;}
-.plates-visual{display:flex;flex-wrap:wrap;gap:4px;margin-top:10px;}
-.plate-chip{padding:5px 10px;font-size:10px;font-weight:700;letter-spacing:1px;color:#fff;}
-.plates-note{font-size:9px;color:#666;margin-top:6px;letter-spacing:.5px;}
 
+/* Calc */
+.calc-result{background:#e8e4dc;border-top:2px solid #808080;border-left:2px solid #808080;border-right:2px solid #fff;border-bottom:2px solid #fff;padding:10px 12px;margin-top:10px;}
+.calc-result-main{font-size:22px;font-weight:700;color:#3b23a8;}
+.calc-result-sub{font-size:10px;color:#555;margin-top:4px;line-height:1.6;}
+.plates-visual{display:flex;flex-wrap:wrap;gap:4px;margin-top:10px;}
+.plate-chip{padding:5px 10px;font-size:10px;font-weight:700;color:#fff;background:#3b23a8;border-top:1px solid #6b5fd4;border-left:1px solid #6b5fd4;border-right:1px solid #1a0a60;border-bottom:1px solid #1a0a60;}
+.plates-note{font-size:9px;color:#666;margin-top:6px;line-height:1.5;}
+
+/* Pace */
+.pace-hint{font-size:9px;color:#666;line-height:1.7;margin-bottom:8px;background:#e8e4dc;border-top:1px solid #808080;border-left:1px solid #808080;border-right:1px solid #fff;border-bottom:1px solid #fff;padding:8px 10px;}
+.pace-hint b{color:#3b23a8;}
+.pace-section{margin-top:10px;border-top:2px solid #fff;border-left:2px solid #fff;border-right:2px solid #808080;border-bottom:2px solid #808080;}
+.pace-section-hd{padding:5px 10px;display:flex;align-items:center;justify-content:space-between;}
+.pace-section-title{color:#fff;font-size:11px;font-weight:700;letter-spacing:2px;}
+.pace-section-ref{color:rgba(255,255,255,.8);font-size:9px;}
+.pace-zone-grid{background:#e8e4dc;padding:6px;}
+.pace-zone{display:grid;grid-template-columns:1fr auto;align-items:center;padding:5px 6px;border-bottom:1px solid #ccc;}
+.pace-zone:last-child{border-bottom:none;}
+.pace-zone.highlight{background:#d4d0c8;}
+.pace-zone-lbl{font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:#555;}
+.pace-zone-name{font-size:9px;font-weight:700;color:#333;margin-top:1px;}
+.pace-zone-val{font-size:13px;font-weight:700;color:#3b23a8;text-align:right;}
+.pace-zone-val.hl{background:#3b23a8;color:#fff;padding:2px 8px;font-size:12px;}
+.pace-splits{background:#d4d0c8;border-top:1px solid #808080;padding:6px 8px;}
+.pace-splits-title{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:4px;}
+.pace-split-row{display:flex;justify-content:space-between;padding:2px 0;font-size:9px;color:#555;border-bottom:1px solid #c8c4bc;}
+.pace-split-row:last-child{border-bottom:none;}
+.pace-split-row b{color:#3b23a8;}
+.pace-nodata{font-size:10px;color:#aaa;text-align:center;padding:16px;}
+.pace-warn{font-size:9px;color:#880000;background:#ffe8e8;border:1px solid #cc8888;padding:6px 10px;margin-top:8px;line-height:1.6;}
 </style>
 </head>
 <body>
 
+<div class="hdr">
+  <div class="title-bar">
+    <div class="app-name">HYGIE® TRACKER</div>
+    <div class="app-meta" id="appMeta" onclick="openGlobalStats()">0% ALL-TIME · 📊</div>
+  </div>
+  <div class="week-nav">
+    <div class="arr" id="btnPrev">◄</div>
+    <div class="week-info">
+      <span class="week-label" id="weekLabel">SEMAINE —</span>
+      <span class="week-dates" id="weekDates">—</span>
+    </div>
+    <div class="arr" id="btnNext">►</div>
+  </div>
+  <div class="gbar-wrap">
+    <div class="gbar-labels">
+      <span>SEMAINE EN COURS</span>
+      <span id="gbarPct">0/10 blocs</span>
+    </div>
+    <div class="gbar-out"><div class="gbar-in" id="gbarIn" style="width:0%"></div></div>
+  </div>
+</div>
+
+<div class="content" id="main"></div>
+
+<!-- MODAL -->
+<div class="moverlay hidden" id="mOverlay">
+  <div class="mwin">
+    <div class="mbar" id="mBar" style="background:linear-gradient(90deg,#3b23a8,#6b5fd4)">
+      <span class="mbar-t" id="mTitle">STATS</span>
+      <div class="mclose-btn" id="mCloseX">✕</div>
+    </div>
+    <div class="mbody" id="mBody"></div>
+  </div>
+</div>
+
+<!-- DRAWER FAB -->
 <div class="drawer-fab" id="drawerFab">🛠</div>
+
+<!-- DRAWER -->
 <div class="drawer-overlay hidden" id="drawerOverlay">
   <div class="drawer-win">
     <div class="drawer-titlebar">
@@ -161,11 +259,14 @@ html,body{background:#d4d0c8;color:#111;font-family:'IBM Plex Mono',monospace;mi
       <button class="dtab active" onclick="switchDTab('pr')">🏆 PR</button>
       <button class="dtab" onclick="switchDTab('pct')">% BARRE</button>
       <button class="dtab" onclick="switchDTab('plates')">🏋 PLATES</button>
+      <button class="dtab" onclick="switchDTab('pace')">🏃 ALLURES</button>
     </div>
+
+    <!-- PR -->
     <div class="dtool active" id="dtool-pr">
       <div class="sect-title">ENREGISTRER UN PR</div>
       <span class="win-label">MOUVEMENT</span>
-      <input class="win-input" id="prName" placeholder="Ex: Snatch, Back Squat...">
+      <input class="win-input" id="prName" placeholder="Ex: Snatch, Clean, Deadlift...">
       <span class="win-label">TYPE</span>
       <div class="radio-group" id="prTypeGroup">
         <div class="radio-btn active" data-val="kg" onclick="setPrType('kg')">KG</div>
@@ -175,363 +276,657 @@ html,body{background:#d4d0c8;color:#111;font-family:'IBM Plex Mono',monospace;mi
       <span class="win-label">VALEUR</span>
       <div class="win-row">
         <input class="win-input" id="prVal" type="number" step="0.25" placeholder="0" style="flex:1">
-        <span id="prUnit" style="font-size:11px;font-weight:700;color:#555;padding:8px 4px;">KG</span>
+        <span id="prUnit" style="font-size:11px;font-weight:700;color:#555;padding:8px 4px;align-self:center;">KG</span>
       </div>
       <button class="win-btn-primary" onclick="savePR()">💾 ENREGISTRER</button>
       <div class="sect-title" style="margin-top:14px;">MES PR</div>
       <div id="prList"></div>
     </div>
+
+    <!-- PCT -->
     <div class="dtool" id="dtool-pct">
-      <div class="sect-title">POURCENTAGES BARRE</div>
+      <div class="sect-title">% DE BARRE</div>
       <span class="win-label">1RM (KG)</span>
-      <input class="win-input" id="pctRM" type="number" step="0.5" placeholder="Ex: 100" oninput="if(this.value)calcPct()">
+      <input class="win-input" id="pctRM" type="number" step="0.5" placeholder="Ex: 100">
       <button class="win-btn-primary" onclick="calcPct()">CALCULER</button>
       <div id="pctResult"></div>
     </div>
+
+    <!-- PLATES -->
     <div class="dtool" id="dtool-plates">
       <div class="sect-title">CALCULATEUR DE PLATES</div>
       <span class="win-label">POIDS CIBLE (KG)</span>
-      <input class="win-input" id="plTarget" type="number" step="0.25" placeholder="Ex: 80" oninput="if(this.value)calcPlates()">
-      <span class="win-label">DÉJÀ SUR LA BARRE — BARRE INCLUSE (0 = VIDE)</span>
-      <input class="win-input" id="plLoaded" type="number" step="0.25" placeholder="0" value="0" oninput="if(document.getElementById('plTarget').value)calcPlates()">
+      <input class="win-input" id="plTarget" type="number" step="0.25" placeholder="Ex: 80">
+      <span class="win-label">DÉJÀ SUR LA BARRE (0 = barre vide)</span>
+      <input class="win-input" id="plLoaded" type="number" step="0.25" value="0">
       <button class="win-btn-primary" onclick="calcPlates()">CALCULER</button>
       <div id="plResult"></div>
     </div>
-  </div>
-</div>
 
-<div class="moverlay hidden" id="mOverlay">
-  <div class="mwin">
-    <div class="mbar" id="mBar">
-      <span class="mbar-t" id="mTitle">ANALYSE</span>
-      <div class="mclose-btn" id="mCloseX">✕</div>
+    <!-- PACE -->
+    <div class="dtool" id="dtool-pace">
+      <div class="sect-title">🏃 ALLURES</div>
+      <div class="pace-hint">
+        Décris tes perfs en texte libre.<br>
+        <b>ROW :</b> "2km row 7min30" · "row 2000m 7:30"<br>
+        <b>RUN :</b> "5km run 22min" · "cooper 2800m"<br>
+        <b>BIKE :</b> "FTP 220W"
+      </div>
+      <textarea class="win-input" id="paceData" style="min-height:72px;resize:vertical;" placeholder="Ex: 2km row 7min30 · 5km run 22min · FTP 220W"></textarea>
+      <button class="win-btn-primary" onclick="parsePaceData()">📊 CALCULER</button>
+      <div id="paceResult"></div>
     </div>
-    <div class="mbody" id="mBody"></div>
   </div>
 </div>
-
-<div class="hdr">
-  <div class="title-bar"><div class="app-name">HYGIE® TRACKER</div><div class="app-pct" id="gPct">0%</div></div>
-  <div class="wm-bar"><span class="wm-bar-t">📅 SEMAINE EN COURS</span></div>
-  <div class="wm-grid" id="wmGrid"></div>
-  <div class="daynav">
-    <div class="arr" id="btnPrev">◄</div>
-    <div class="dayinfo"><span class="dayname" id="dayName">—</span><span class="daydate" id="dayDate">—</span></div>
-    <div class="arr" id="btnNext">►</div>
-  </div>
-  <div class="progsec">
-    <div class="proglbl"><span>PROGRESSION DU JOUR</span><span id="dayPct">0/0</span></div>
-    <div class="progout"><div class="progin" id="dayBar" style="width:0%"></div></div>
-  </div>
-</div>
-<div class="content" id="main"></div>
 
 <script>
+// ═══════════════════════════════════════════
+// CONSTANTS & SETUP
+// ═══════════════════════════════════════════
 var MO=['JANVIER','FÉVRIER','MARS','AVRIL','MAI','JUIN','JUILLET','AOÛT','SEPTEMBRE','OCTOBRE','NOVEMBRE','DÉCEMBRE'];
-var DFR=['DIM','LUN','MAR','MER','JEU','VEN','SAM'];
-var DFL=['DIMANCHE','LUNDI','MARDI','MERCREDI','JEUDI','VENDREDI','SAMEDI'];
-var START=new Date(2026,2,16);
+var PROGRAM_START=new Date(2026,2,16); // lundi 16 mars 2026
+PROGRAM_START.setHours(0,0,0,0);
 
-var SCH={
-  1:{s:[
-    {t:'MATIN',n:'SNATCH TECHNIQUE',d:'65→72% 1RM · 6-8 sets every 1:30 · focus placement bas',tp:'halte'},
-    {t:'MATIN',n:'BACK SQUAT',d:'4×4 · 65→75% 1RM · ≈91→105kg · pause 3s en bas',tp:'force'},
-    {t:'SOIR · MIN. 6H',n:'ZONE 2 BIKEERG',d:'45 min · FC 130-145 bpm · RPE 3/10 · conversation possible',tp:'zone2'}
-  ]},
-  2:{s:[
-    {t:'MATIN',n:'CLEAN & JERK TECHNIQUE',d:'65→72% 1RM · 6-8 sets every 1:30 · focus réception',tp:'halte'},
-    {t:'MATIN',n:'STRICT PRESS + TRACTION',d:'Press 4×5 · 65→75% 1RM ≈45→52kg · Pendlay Row même volume',tp:'force'},
-    {t:'SOIR · MIN. 6H',n:'ZONE 2 ROWER',d:'45 min · ~2:45/500m · FC stable sous seuil · RPE 3/10',tp:'zone2'}
-  ]},
-  3:{s:[
-    {t:'MATIN',n:'GYMNASTICS STRICT',d:'Pull up +5kg · HSPU strict 4×5-8 · Ring Dips 3×8 · pas de kipping',tp:'gym'},
-    {t:'SOIR · MIN. 6H',n:'WOD SEUIL',d:'Intensité 7/10 · rythme constant maintenu · même débit sur tous les rounds',tp:'wod'}
-  ]},
-  4:{s:[
-    {t:'MATIN',n:'MOBILITÉ',d:'Hanches 90/90 · band work épaules · thoracique · RPE 1/10',tp:'mob'},
-    {t:'SOIR',n:'ZONE 2 LONGUE ★',d:'60 min · FC < 145 bpm tout du long · session clé de la semaine',tp:'zone2'}
-  ]},
-  5:{s:[
-    {t:'MATIN',n:'SNATCH OU C&J',d:'Alterné sem A/B · 65→72% 1RM · même structure que lun/mar',tp:'halte'},
-    {t:'MATIN',n:'BACK SQUAT MAINTIEN',d:'3×5 · 70-75% 1RM · ≈98→105kg · focus vitesse concentrique',tp:'force'},
-    {t:'MATIN',n:'BENCH / STRICT PRESS',d:'Alterné chaque semaine · 4×5 · 70-75% 1RM',tp:'force'},
-    {t:'SOIR · MIN. 6H',n:'GYMNASTICS CAPACITÉ',d:'Kipping · Muscle Up · HSW · enchaînements sous légère fatigue',tp:'gym'}
-  ]},
-  6:{s:[
-    {t:'MATIN',n:'WOD MAXIMAL ⚡',d:'Intensité 9-10/10 · seul vrai max de la semaine · format libre',tp:'wod'},
-    {t:'SOIR · MIN. 6H',n:'ZONE 2 FLUSH',d:'30 min · RPE 2/10 · élimination métabolique post-WOD',tp:'zone2'}
-  ]},
-  0:null
+// ── WEEKLY BLOCKS DEFINITION ──
+// 9 blocs par semaine : 1 snatch + 1 clean + 1 squat + 1 press + 1 deadlift + 3 zone2 + 2 wod
+var BLOCKS=[
+  {id:'snatch',   type:'halte', icon:'⚡', label:'SNATCH',         sub:'Haltérophilie · 1×/semaine',          hint:'Technique ou max effort · 6-8 sets · 60-80% 1RM'},
+  {id:'clean',    type:'halte', icon:'🔩', label:'CLEAN & JERK',   sub:'Haltérophilie · 1×/semaine',          hint:'Focus réception et catch · 6-8 sets · 60-80% 1RM'},
+  {id:'squat',    type:'force', icon:'🦵', label:'BACK SQUAT',     sub:'Force · 1×/semaine',                  hint:'4-5 sets · 3-6 reps · 70-85% 1RM'},
+  {id:'press',    type:'force', icon:'💪', label:'BENCH / PRESS',  sub:'Force · 1×/semaine · alterné',        hint:'Bench Press ou Shoulder Press · 4×5 · 70-80% 1RM'},
+  {id:'deadlift', type:'force', icon:'🏗', label:'DEADLIFT',       sub:'Force · 1×/semaine',                  hint:'3-4 sets · 3-5 reps · 70-85% 1RM · conventional ou sumo'},
+  {id:'wod1',     type:'wod',   icon:'🔥', label:'WOD',            sub:'Conditionnement · 1er WOD',           hint:'Format libre · intensité 7-10/10'},
+  {id:'wod2',     type:'wod',   icon:'🔥', label:'WOD',            sub:'Conditionnement · 2e WOD',            hint:'Format libre · intensité 7-10/10'},
+];
+// Zone 2 est gérée séparément (3 sessions avec saisie du temps)
+
+// Couleurs par type
+var TYPE_COLORS={
+  halte:{bg:'linear-gradient(90deg,#7a5500,#c9a020)',light:'#c9a020'},
+  force:{bg:'linear-gradient(90deg,#7a2000,#dd5522)',light:'#dd5522'},
+  wod:  {bg:'linear-gradient(90deg,#550000,#cc2200)',light:'#cc2200'},
+  zone2:{bg:'linear-gradient(90deg,#1a0870,#6b5fd4)',light:'#6b5fd4'},
 };
 
-var TLAB={halte:'⚡ HALTÉRO',force:'💪 FORCE',zone2:'🔵 ZONE 2',gym:'🤸 GYMNASTICS',wod:'🔥 WOD',mob:'🌿 MOBILITÉ'};
-var ACOL={halte:'#8a5e00',zone2:'#3b23a8',wod:'#880000',force:'#7a2000',gym:'#3a0870',mob:'#004422'};
-var ANAL=['halte','zone2','wod','force','gym','mob'];
+// ═══════════════════════════════════════════
+// STATE & STORAGE
+// ═══════════════════════════════════════════
+var state={}; // { weekKey: { blockId: true/false, z2: [min,min,min] } }
+var curWeekMon=getThisMonday(new Date());
 
-var state={};
-var cur=new Date();cur.setHours(0,0,0,0);
-function load(){try{var s=localStorage.getItem('hygie_v4');if(s)state=JSON.parse(s);}catch(e){}}
-function save(){try{localStorage.setItem('hygie_v4',JSON.stringify(state));}catch(e){}}
-function dk(d){return d.getFullYear()+'_'+d.getMonth()+'_'+d.getDate();}
-function sk(d,i){return dk(d)+'_'+i;}
-function isC(d,i){return !!state[sk(d,i)];}
-function tog(d,i){state[sk(d,i)]=!state[sk(d,i)];save();renderAll();}
-function getDow(d){return SCH[d.getDay()]||null;}
-function sameD(a,b){return a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()&&a.getDate()===b.getDate();}
-function fmt(d){return d.getDate()+' '+MO[d.getMonth()]+' '+d.getFullYear();}
-function getMon(d){var dw=d.getDay(),df=dw===0?-6:1-dw,m=new Date(d);m.setDate(d.getDate()+df);m.setHours(0,0,0,0);return m;}
-function gPct(){
-  var today=new Date();today.setHours(0,0,0,0);
-  var t=0,d=0,dd=new Date(START);
-  while(dd<=today){var D=getDow(dd);if(D){D.s.forEach(function(_,i){t++;if(isC(dd,i))d++;});}dd.setDate(dd.getDate()+1);}
-  return t?Math.round(d/t*100):0;
+function getThisMonday(d){
+  var dd=new Date(d);dd.setHours(0,0,0,0);
+  var day=dd.getDay();
+  var diff=day===0?-6:1-day;
+  dd.setDate(dd.getDate()+diff);
+  return dd;
+}
+function weekKey(mon){return mon.getFullYear()+'_W'+getWeekNum(mon);}
+function getWeekNum(d){
+  var jan4=new Date(d.getFullYear(),0,4);
+  var startOfWeek=new Date(jan4);startOfWeek.setDate(jan4.getDate()-(jan4.getDay()||7)+1);
+  return Math.round((d-startOfWeek)/(7*864e5))+1;
+}
+function weekNum1(mon){
+  // relative to program start
+  var diff=Math.round((mon-PROGRAM_START)/(7*864e5));
+  return diff+1;
+}
+function getWeekData(mon){
+  var k=weekKey(mon);
+  if(!state[k])state[k]={blocks:{},z2:[null,null,null]};
+  return state[k];
 }
 
-// MODAL
-function openModal(type){
-  var col=ACOL[type];
-  var icons={halte:'⚡',zone2:'🔵',wod:'🔥',force:'💪',gym:'🤸',mob:'🌿'};
-  var labs={halte:'HALTÉRO',zone2:'ZONE 2',wod:'WOD',force:'FORCE',gym:'GYMNASTICS',mob:'MOBILITÉ'};
-  document.getElementById('mBar').style.background='linear-gradient(90deg,'+col+','+col+'aa)';
-  document.getElementById('mTitle').textContent=icons[type]+' RÉGULARITÉ '+labs[type];
-  var body=document.getElementById('mBody');body.innerHTML='';
+function loadState(){try{var s=localStorage.getItem('hygie_v5');if(s)state=JSON.parse(s);}catch(e){}}
+function saveState(){try{localStorage.setItem('hygie_v5',JSON.stringify(state));}catch(e){}}
+
+function isBlockDone(mon,id){return !!(getWeekData(mon).blocks[id]);}
+function toggleBlock(mon,id){var w=getWeekData(mon);w.blocks[id]=!w.blocks[id];saveState();renderAll();}
+function getZ2(mon){return getWeekData(mon).z2||[null,null,null];}
+function setZ2(mon,idx,min){var w=getWeekData(mon);if(!w.z2)w.z2=[null,null,null];w.z2[idx]=min;saveState();renderAll();}
+function clearZ2(mon,idx){setZ2(mon,idx,null);}
+
+function z2Total(mon){return getZ2(mon).reduce(function(s,v){return s+(v||0);},0);}
+function z2Done(mon){return getZ2(mon).filter(function(v){return v!==null&&v>0;}).length;}
+function weekDone(mon){
+  var b=BLOCKS.filter(function(b){return isBlockDone(mon,b.id);}).length;
+  return b+z2Done(mon);
+}
+function weekTotal(){return BLOCKS.length+3;} // 7 blocs + 3 z2 = 10
+
+// ─ Global rate across all tracked weeks ─
+function globalRate(){
   var today=new Date();today.setHours(0,0,0,0);
-  var weekPrev=0;
-  [0,1,2,3,4,5,6].forEach(function(dow){var D=SCH[dow];if(!D)return;D.s.forEach(function(s){if(s.tp===type)weekPrev++;});});
-  var mon=getMon(today);var weekDone=0;
-  for(var wi=0;wi<7;wi++){var wd=new Date(mon);wd.setDate(mon.getDate()+wi);var Dw=getDow(wd);if(!Dw)continue;Dw.s.forEach(function(s,i){if(s.tp===type&&isC(wd,i))weekDone++;});}
-  var totAll=0,doneAll=0;
-  var END=new Date(START);END.setDate(START.getDate()+55);
-  var dd=new Date(START);
-  while(dd<=today&&dd<=END){var D=getDow(dd);if(D){D.s.forEach(function(s,i){if(s.tp===type){totAll++;if(isC(dd,i))doneAll++;}});}dd.setDate(dd.getDate()+1);}
-  var rate=totAll?Math.round(doneAll/totAll*100):0;
-  var curStr=0,tmp=0,hist=[];
-  var dd2=new Date(START);
-  while(dd2<=today&&dd2<=END){
-    var D2=getDow(dd2);if(D2){
-      var ts2=[];D2.s.forEach(function(s,i){if(s.tp===type)ts2.push({s:s,i:i});});
-      if(ts2.length){var dn=0;ts2.forEach(function(x){if(isC(dd2,x.i))dn++;});if(dn>0)tmp++;else tmp=0;hist.push({date:new Date(dd2),done:dn,exp:ts2.length});}
-    }
-    dd2.setDate(dd2.getDate()+1);
+  var mon=getThisMonday(PROGRAM_START);
+  var done=0,tot=0;
+  while(mon<=today){
+    tot+=weekTotal();
+    done+=weekDone(new Date(mon));
+    mon.setDate(mon.getDate()+7);
   }
-  curStr=tmp;
-  function mkCard(val,lbl){var card=document.createElement('div');card.className='acard';var v=document.createElement('div');v.className='aval';v.style.color=col;v.textContent=val;var l=document.createElement('div');l.className='albl';l.textContent=lbl;card.appendChild(v);card.appendChild(l);return card;}
-  var sc=document.createElement('div');sc.className='astats';
-  sc.appendChild(mkCard(weekDone+'/'+weekPrev,'CETTE SEMAINE'));
-  sc.appendChild(mkCard(rate+'%','TAUX GLOBAL'));
-  sc.appendChild(mkCard(curStr,'STREAK JOURS'));
-  body.appendChild(sc);
-  var hl=document.createElement('div');hl.className='hlbl';hl.textContent='🗓 CALENDRIER 8 SEMAINES';body.appendChild(hl);
-  var dr=document.createElement('div');dr.className='hdow';
-  dr.innerHTML='<div class="hpad"></div>'+['L','M','M','J','V','S','D'].map(function(x){return'<div class="hd">'+x+'</div>';}).join('');
-  body.appendChild(dr);
-  var hw=document.createElement('div');hw.className='hweeks';
-  for(var w=0;w<8;w++){
-    var row=document.createElement('div');row.className='hweek';row.innerHTML='<div class="hwn">S'+(w+1)+'</div>';
-    var daysEl=document.createElement('div');daysEl.className='hdays';
-    for(var dow=0;dow<7;dow++){
-      var d=new Date(START);d.setDate(START.getDate()+w*7+dow);
-      var Dc=getDow(d);var cell=document.createElement('div');var st;
-      if(!Dc){st='rest';}
-      else{var tsc=[];Dc.s.forEach(function(s,i){if(s.tp===type)tsc.push({s:s,i:i});});
-        if(!tsc.length){st='rest';}
-        else{var dnc=0;tsc.forEach(function(x){if(isC(d,x.i))dnc++;});if(d>today&&dnc===0)st='fut';else st=dnc===tsc.length?'full':dnc>0?'part':'miss';}
+  return tot?Math.round(done/tot*100):0;
+}
+
+// ═══════════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════════
+function fmtMonday(mon){
+  var sun=new Date(mon);sun.setDate(mon.getDate()+6);
+  return mon.getDate()+' '+MO[mon.getMonth()].slice(0,3)+' → '+sun.getDate()+' '+MO[sun.getMonth()].slice(0,3)+' '+sun.getFullYear();
+}
+function isCurrentWeek(mon){
+  var cur=getThisMonday(new Date());
+  return mon.getTime()===cur.getTime();
+}
+
+function renderHdr(){
+  var done=weekDone(curWeekMon),tot=weekTotal();
+  var pct=tot?Math.round(done/tot*100):0;
+  var gr=globalRate();
+  document.getElementById('appMeta').textContent=gr+'% ALL-TIME · 📊';
+  // Week label = date range
+  var sun=new Date(curWeekMon);sun.setDate(curWeekMon.getDate()+6);
+  var label=(isCurrentWeek(curWeekMon)?'★ ':'')+
+    curWeekMon.getDate()+' '+MO[curWeekMon.getMonth()].slice(0,3)+' → '+
+    sun.getDate()+' '+MO[sun.getMonth()].slice(0,3)+' '+sun.getFullYear();
+  document.getElementById('weekLabel').textContent=label;
+  document.getElementById('weekDates').textContent=pct+'% · '+done+'/'+tot+' blocs complétés';
+  document.getElementById('gbarPct').textContent=done+'/'+tot+' blocs';
+  var bar=document.getElementById('gbarIn');
+  bar.style.width=pct+'%';
+  bar.className='gbar-in'+(pct===100?' perfect':'');
+}
+
+function renderMain(){
+  var el=document.getElementById('main');el.innerHTML='';
+  var mon=curWeekMon;
+
+  // ── SUMMARY ──
+  var z2t=z2Total(mon);
+  var z2d=z2Done(mon);
+  var halte=BLOCKS.filter(function(b){return b.type==='halte'&&isBlockDone(mon,b.id);}).length;
+  var force=BLOCKS.filter(function(b){return b.type==='force'&&isBlockDone(mon,b.id);}).length;
+  var wods=BLOCKS.filter(function(b){return b.type==='wod'&&isBlockDone(mon,b.id);}).length;
+
+  var sw=document.createElement('div');sw.className='wsummary';
+  sw.innerHTML='<div class="wsummary-bar"><span>📊 BILAN SEMAINE</span><span>'+weekDone(mon)+'/'+weekTotal()+'</span></div>'+
+    '<div class="wsummary-grid">'+
+    '<div class="wstat"><div class="wstat-val" style="color:#c9a020">'+halte+'/2</div><div class="wstat-lbl">HALTÉRO</div></div>'+
+    '<div class="wstat"><div class="wstat-val" style="color:#dd5522">'+force+'/3</div><div class="wstat-lbl">FORCE</div></div>'+
+    '<div class="wstat"><div class="wstat-val" style="color:#cc2200">'+wods+'/2</div><div class="wstat-lbl">WOD</div></div>'+
+    '<div class="wstat"><div class="wstat-val" style="color:'+(z2t>=180?'#005533':'#3b23a8')+'">'+z2t+'</div><div class="wstat-lbl">MIN ZONE 2</div><div class="wstat-sub">OBJ. 180 MIN</div></div>'+
+    '</div>';
+  el.appendChild(sw);
+
+  // ── HALTÉRO ──
+  renderBlockGroup(el, mon, 'halte', '⚡ HALTÉROPHILIE',
+    BLOCKS.filter(function(b){return b.type==='halte';}),
+    halte+'/2');
+
+  // ── FORCE ──
+  renderBlockGroup(el, mon, 'force', '💪 FORCE',
+    BLOCKS.filter(function(b){return b.type==='force';}),
+    force+'/3');
+
+  // ── ZONE 2 ──
+  renderZone2(el, mon, z2d, z2t);
+
+  // ── WOD ──
+  renderBlockGroup(el, mon, 'wod', '🔥 WOD',
+    BLOCKS.filter(function(b){return b.type==='wod';}),
+    wods+'/2');
+}
+
+function renderBlockGroup(el, mon, type, title, blocks, badge){
+  var wrap=document.createElement('div');
+  wrap.className='block-wrap btype-'+type;
+
+  // section header
+  var hd=document.createElement('div');hd.className='sec-hd';
+  var t=document.createElement('div');t.className='sec-hd-t';t.textContent=title;
+  var b=document.createElement('div');b.className='sec-hd-badge';b.textContent=badge;
+  hd.appendChild(t);hd.appendChild(b);
+  wrap.appendChild(hd);
+
+  blocks.forEach(function(blk){
+    var done=isBlockDone(mon,blk.id);
+    var row=document.createElement('div');
+    row.className='block'+(done?' done':'');
+    row.innerHTML=
+      '<div class="block-icon">'+blk.icon+'</div>'+
+      '<div class="block-info">'+
+        '<div class="block-title">'+blk.label+'</div>'+
+        '<div class="block-sub">'+blk.sub+'</div>'+
+        (done?'':'<div class="block-sub" style="color:#888;font-style:italic">'+blk.hint+'</div>')+
+      '</div>'+
+      '<div class="block-chk"><span class="chkmark">✓</span></div>';
+
+    // Stats button for haltero blocks
+    if(blk.type==='halte'||blk.type==='force'){
+      var sb=document.createElement('button');
+      sb.style.cssText='background:rgba(0,0,0,.08);border:1px solid #bbb;font-family:IBM Plex Mono,monospace;font-size:8px;font-weight:700;letter-spacing:1px;padding:3px 7px;cursor:pointer;color:#555;flex-shrink:0;margin-right:4px;';
+      sb.textContent='📈';
+      sb.onclick=function(e){e.stopPropagation();openStatsModal(blk);};
+      row.insertBefore(sb,row.lastChild);
+    }
+
+    row.onclick=function(){toggleBlock(mon,blk.id);};
+    wrap.appendChild(row);
+  });
+
+  el.appendChild(wrap);
+}
+
+function renderZone2(el, mon, z2d, z2t){
+  var z2vals=getZ2(mon);
+  var pct=Math.min(100,Math.round(z2t/180*100));
+  var complete=z2t>=180;
+
+  var wrap=document.createElement('div');wrap.className='block-wrap btype-zone2';
+
+  var hd=document.createElement('div');hd.className='sec-hd';
+  var t=document.createElement('div');t.className='sec-hd-t';t.textContent='🔵 ZONE 2';
+  var b=document.createElement('div');b.className='sec-hd-badge'+(complete?' ok':'');
+  b.textContent=z2t+'/180 MIN';
+  hd.appendChild(t);hd.appendChild(b);
+  wrap.appendChild(hd);
+
+  var body=document.createElement('div');body.className='z2-block';
+
+  // 3 slots
+  for(var i=0;i<3;i++){
+    (function(idx){
+      var val=z2vals[idx];
+      var editing=false;
+      var row=document.createElement('div');row.className='z2-row';
+
+      var num=document.createElement('div');num.className='z2-num';
+      num.textContent=idx+1;
+      if(val!==null&&val>0)num.style.background='#005533';
+      row.appendChild(num);
+
+      var doneRow=document.createElement('div');doneRow.className='z2-done-row';
+
+      if(val!==null&&val>0){
+        // Show completed
+        var disp=document.createElement('div');disp.className='z2-time-display';
+        disp.textContent=val+' MIN';
+        var btns=document.createElement('div');btns.className='z2-btns';
+        var editBtn=document.createElement('button');editBtn.className='z2-edit-btn';editBtn.textContent='✏';editBtn.type='button';
+        var delBtn=document.createElement('button');delBtn.className='z2-del-btn';delBtn.textContent='✕';delBtn.type='button';
+        delBtn.onclick=function(){clearZ2(mon,idx);};
+        editBtn.onclick=function(){
+          // Switch to edit mode inline
+          doneRow.innerHTML='';
+          renderZ2Input(doneRow,mon,idx);
+        };
+        btns.appendChild(editBtn);btns.appendChild(delBtn);
+        doneRow.appendChild(disp);doneRow.appendChild(btns);
+      } else {
+        // Show input
+        renderZ2Input(doneRow,mon,idx);
       }
-      cell.className='hday '+st+(sameD(d,today)?' now':'');cell.textContent=d.getDate();daysEl.appendChild(cell);
-    }
-    row.appendChild(daysEl);hw.appendChild(row);
+
+      row.appendChild(doneRow);
+      body.appendChild(row);
+    })(i);
   }
-  body.appendChild(hw);
-  if(hist.length){
-    var pl=document.createElement('div');pl.className='plbl';pl.textContent='📈 HISTORIQUE';body.appendChild(pl);
-    var pp=document.createElement('div');pp.className='ppips';
-    hist.forEach(function(h){for(var pi=0;pi<h.exp;pi++){var p=document.createElement('div');p.className='ppip '+(pi<h.done?'hit':'mis');pp.appendChild(p);}});
-    body.appendChild(pp);
-    var leg=document.createElement('div');leg.className='pleg';
-    leg.innerHTML='<span><i style="background:#3b23a8"></i>FAIT</span><span><i style="background:#b0aca4"></i>MANQUÉ</span>';
-    body.appendChild(leg);
+
+  wrap.appendChild(body);
+
+  // Total progress bar
+  var tbar=document.createElement('div');tbar.className='z2-total-bar';
+  var ttxt=document.createElement('div');ttxt.className='z2-total-txt';
+  ttxt.textContent=z2t+' MIN / 180 MIN'+(complete?' ✓':'');
+  if(complete)ttxt.style.color='#005533';
+  var pbo=document.createElement('div');pbo.className='z2-pbar-out';
+  var pbi=document.createElement('div');pbi.className='z2-pbar-in'+(complete?' complete':'');
+  pbi.style.width=pct+'%';
+  pbo.appendChild(pbi);
+  tbar.appendChild(ttxt);tbar.appendChild(pbo);
+  wrap.appendChild(tbar);
+
+  el.appendChild(wrap);
+}
+
+function renderZ2Input(container,mon,idx){
+  container.innerHTML='';
+  var inpRow=document.createElement('div');inpRow.className='z2-input-row';
+  var inp=document.createElement('input');
+  inp.className='z2-input';inp.type='number';inp.min='1';inp.max='180';inp.placeholder='MIN';inp.id='z2inp'+idx;
+  var lbl=document.createElement('span');lbl.className='z2-input-lbl';lbl.textContent='min';
+  var saveBtn=document.createElement('button');saveBtn.className='z2-save-btn';saveBtn.textContent='OK';saveBtn.type='button';
+  saveBtn.onclick=function(){
+    var v=parseInt(inp.value);
+    if(v>0&&v<=300){setZ2(mon,idx,v);}
+  };
+  inp.onkeydown=function(e){if(e.key==='Enter')saveBtn.click();};
+  inpRow.appendChild(inp);inpRow.appendChild(lbl);inpRow.appendChild(saveBtn);
+  container.appendChild(inpRow);
+  setTimeout(function(){try{document.getElementById('z2inp'+idx).focus();}catch(e){}},60);
+}
+
+function renderAll(){renderHdr();renderMain();}
+
+// ── NAVIGATION ──
+document.getElementById('btnPrev').onclick=function(){curWeekMon=new Date(curWeekMon);curWeekMon.setDate(curWeekMon.getDate()-7);renderAll();};
+document.getElementById('btnNext').onclick=function(){curWeekMon=new Date(curWeekMon);curWeekMon.setDate(curWeekMon.getDate()+7);renderAll();};
+
+// ═══════════════════════════════════════════
+// STATS MODAL
+// ═══════════════════════════════════════════
+function openStatsModal(blk){
+  document.getElementById('mTitle').textContent=blk.icon+' '+blk.label;
+  document.getElementById('mBar').style.background=TYPE_COLORS[blk.type].bg;
+  var body=document.getElementById('mBody');body.innerHTML='';
+
+  // Count history
+  var totalWeeks=0,doneWeeks=0,streak=0,bestStreak=0,tmp=0,history=[];
+  var mon=getThisMonday(PROGRAM_START);
+  var today=new Date();today.setHours(0,0,0,0);
+  var curMon=getThisMonday(today);
+
+  while(mon<=curMon){
+    totalWeeks++;
+    var done=isBlockDone(mon,blk.id);
+    if(done)doneWeeks++;
+    if(done){tmp++;if(tmp>bestStreak)bestStreak=tmp;}else tmp=0;
+    history.push({mon:new Date(mon),done:done,future:mon>today});
+    mon.setDate(mon.getDate()+7);
   }
+  streak=tmp;
+
+  var col=TYPE_COLORS[blk.type].light;
+
+  // Stats cards
+  var sc=document.createElement('div');sc.className='astats';
+  function mkCard(val,lbl,c){var d=document.createElement('div');d.className='acard';var v=document.createElement('div');v.className='aval';v.style.color=c||col;v.textContent=val;var l=document.createElement('div');l.className='albl';l.textContent=lbl;d.appendChild(v);d.appendChild(l);return d;}
+  sc.appendChild(mkCard(doneWeeks+'/'+totalWeeks,'SEMAINES FAITES'));
+  sc.appendChild(mkCard(totalWeeks?Math.round(doneWeeks/totalWeeks*100)+'%':'—','TAUX'));
+  sc.appendChild(mkCard(streak,'STREAK SEM.'));
+  body.appendChild(sc);
+
+  // History pips (1 per week)
+  var hl=document.createElement('div');hl.className='hlbl';hl.textContent='📅 HISTORIQUE SEMAINES';body.appendChild(hl);
+  var pp=document.createElement('div');pp.className='ppips';
+  history.forEach(function(h){
+    var p=document.createElement('div');
+    p.className='ppip '+(h.done?'hit':'mis');
+    p.title='Sem. '+getWeekNum(h.mon);
+    pp.appendChild(p);
+  });
+  body.appendChild(pp);
+  var leg=document.createElement('div');leg.className='pleg';
+  leg.innerHTML='<span><i style="background:#3b23a8"></i>FAIT</span><span><i style="background:#b0aca4"></i>NON FAIT</span>';
+  body.appendChild(leg);
+
   var btn=document.createElement('button');btn.className='mclose';btn.textContent='✕ FERMER';btn.onclick=closeModal;body.appendChild(btn);
   document.getElementById('mOverlay').classList.remove('hidden');
 }
+
 function closeModal(){document.getElementById('mOverlay').classList.add('hidden');}
 document.getElementById('mCloseX').onclick=closeModal;
 document.getElementById('mOverlay').onclick=function(e){if(e.target===this)closeModal();};
 
-// RENDERS
-function renderWM(){
-  var el=document.getElementById('wmGrid');el.innerHTML='';
-  var today=new Date();today.setHours(0,0,0,0);var mon=getMon(cur);
-  for(var i=0;i<7;i++){(function(){
-    var d=new Date(mon);d.setDate(mon.getDate()+i);
-    var D=getDow(d),isT=sameD(d,today),isCC=sameD(d,cur);
-    var c=document.createElement('div');c.className='wmc'+(isT?' today':'');
-    if(isCC&&!isT){c.style.outline='2px solid #3b23a8';c.style.outlineOffset='-2px';}
-    var dots=D?D.s.map(function(_,j){return'<div class="wmdot'+(isC(d,j)?' ok':'')+'"></div>';}).join(''):'<div class="wmdot"></div>';
-    c.innerHTML='<span class="wmd">'+DFR[d.getDay()]+'</span><span class="wmn">'+d.getDate()+'</span><div class="wmdots">'+dots+'</div>';
-    var dd=new Date(d);c.onclick=function(){cur=new Date(dd);cur.setHours(0,0,0,0);renderAll();};
-    el.appendChild(c);
-  })();}
-}
-function renderHdr(){
-  document.getElementById('dayName').textContent=DFL[cur.getDay()];
-  document.getElementById('dayDate').textContent=fmt(cur);
-  var D=getDow(cur),tot=0,done=0;
-  if(D){tot=D.s.length;D.s.forEach(function(_,i){if(isC(cur,i))done++;});}
-  document.getElementById('dayPct').textContent=done+'/'+tot+' sessions';
-  document.getElementById('dayBar').style.width=(tot?Math.round(done/tot*100):0)+'%';
-  document.getElementById('gPct').textContent=gPct()+'% PROGRAMME';
-}
-function renderMain(){
-  var el=document.getElementById('main');el.innerHTML='';
-  var D=getDow(cur);
-  if(!D){
-    var r=document.createElement('div');r.className='sess';r.style.cssText='border-top:2px solid #fff;border-left:2px solid #fff;border-right:2px solid #808080;border-bottom:2px solid #808080;';
-    r.innerHTML='<div class="sess-bar" style="background:linear-gradient(90deg,#444,#666)"><span class="sess-bar-l">💤 DIMANCHE</span></div><div class="repos-body"><div class="repos-l">REPOS COMPLET</div><div class="repos-s">RÉCUPÉRATION TOTALE · SNC OFF</div></div>';
-    el.appendChild(r);return;
-  }
-  var tot=D.s.length,done=0,z2=0,hal=0,wod=0;
-  D.s.forEach(function(s,i){if(isC(cur,i)){done++;if(s.tp==='zone2')z2++;if(s.tp==='halte')hal++;if(s.tp==='wod')wod++;}});
-  var bw=document.createElement('div');bw.style.cssText='margin-bottom:8px;border-top:2px solid #fff;border-left:2px solid #fff;border-right:2px solid #808080;border-bottom:2px solid #808080;';
-  bw.innerHTML='<div class="vbar" style="background:linear-gradient(90deg,#3b23a8,#6b5fd4)"><span class="vbar-t">📊 BILAN DU JOUR</span></div><div class="sg"><div class="sb"><div class="sv">'+done+'/'+tot+'</div><div class="sl">FAIT</div></div><div class="sb"><div class="sv" style="color:#8a5e00">'+hal+'</div><div class="sl">HALTÉRO</div></div><div class="sb"><div class="sv">'+z2+'</div><div class="sl">ZONE 2</div></div><div class="sb"><div class="sv" style="color:#880000">'+wod+'</div><div class="sl">WOD</div></div></div>';
-  el.appendChild(bw);
-  D.s.forEach(function(s,si){(function(sess,idx){
-    var checked=isC(cur,idx);
-    var card=document.createElement('div');card.className='sess t-'+sess.tp+(checked?' checked':'');
-    var bar=document.createElement('div');bar.className='sess-bar';
-    var barL=document.createElement('span');barL.className='sess-bar-l';barL.textContent=TLAB[sess.tp];bar.appendChild(barL);
-    if(ANAL.indexOf(sess.tp)!==-1){
-      var btn=document.createElement('button');btn.className='stats-btn';btn.textContent='📈 STATS';btn.type='button';
-      btn.onclick=function(e){e.stopPropagation();openModal(sess.tp);};bar.appendChild(btn);
-    }
-    card.appendChild(bar);
-    var body=document.createElement('div');body.className='sess-body';
-    var info=document.createElement('div');info.className='sess-info';
-    info.innerHTML='<div class="sess-tag">'+sess.t+'</div><div class="sess-title">'+sess.n+'</div><div class="sess-detail">'+sess.d+'</div>';
-    body.appendChild(info);
-    var chk=document.createElement('div');chk.className='chk';chk.innerHTML='<span class="chkmark">✓</span>';
-    body.appendChild(chk);body.onclick=function(){tog(cur,idx);};
-    card.appendChild(body);el.appendChild(card);
-  })(s,si);});
-  var rule=document.createElement('div');rule.className='sess';rule.style.cssText='margin-top:8px;border-top:2px solid #fff;border-left:2px solid #fff;border-right:2px solid #808080;border-bottom:2px solid #808080;';
-  rule.innerHTML='<div class="sess-bar" style="background:linear-gradient(90deg,#444,#666)"><span class="sess-bar-l">ℹ️ RÈGLE D\'OR</span></div><div class="rule-body"><div class="rule-txt">MIN. 6H ENTRE SESSIONS · FORCE TOUJOURS EN PREMIER<br>SI UNE SESSION SAUTE → TOUJOURS CELLE DU SOIR</div></div>';
-  el.appendChild(rule);
-}
-function renderAll(){renderHdr();renderWM();renderMain();}
-document.getElementById('btnPrev').onclick=function(){cur=new Date(cur);cur.setDate(cur.getDate()-1);renderAll();};
-document.getElementById('btnNext').onclick=function(){cur=new Date(cur);cur.setDate(cur.getDate()+1);renderAll();};
+// ═══════════════════════════════════════════
+// GLOBAL STATS MODAL
+// ═══════════════════════════════════════════
+function openGlobalStats(){
+  document.getElementById('mTitle').textContent='📊 STATS GLOBALES';
+  document.getElementById('mBar').style.background='linear-gradient(90deg,#3b23a8,#6b5fd4)';
+  var body=document.getElementById('mBody');body.innerHTML='';
 
-// DRAWER
-document.getElementById('drawerFab').onclick=function(){
-  document.getElementById('drawerOverlay').classList.remove('hidden');
-  renderPRList();
-};
+  var today=new Date();today.setHours(0,0,0,0);
+  var mon=getThisMonday(PROGRAM_START);
+  var curMon=getThisMonday(today);
+
+  // Collect per-week data
+  var weeks=[];
+  var m=new Date(mon);
+  while(m<=curMon){
+    var done=weekDone(new Date(m));
+    var tot=weekTotal();
+    var pct=Math.round(done/tot*100);
+    var z2t=z2Total(new Date(m));
+    var halte=BLOCKS.filter(function(b){return b.type==='halte'&&isBlockDone(new Date(m),b.id);}).length;
+    var force=BLOCKS.filter(function(b){return b.type==='force'&&isBlockDone(new Date(m),b.id);}).length;
+    var wods=BLOCKS.filter(function(b){return b.type==='wod'&&isBlockDone(new Date(m),b.id);}).length;
+    weeks.push({mon:new Date(m),done:done,tot:tot,pct:pct,z2:z2t,halte:halte,force:force,wods:wods});
+    m.setDate(m.getDate()+7);
+  }
+
+  var totalWeeks=weeks.length;
+  var perfectWeeks=weeks.filter(function(w){return w.pct===100;}).length;
+  var totalZ2=weeks.reduce(function(s,w){return s+w.z2;},0);
+  var avgPct=totalWeeks?Math.round(weeks.reduce(function(s,w){return s+w.pct;},0)/totalWeeks):0;
+  var streak=0,bestStreak=0,tmp=0;
+  weeks.forEach(function(w){if(w.pct===100){tmp++;if(tmp>bestStreak)bestStreak=tmp;}else tmp=0;});streak=tmp;
+  var totalDone=weeks.reduce(function(s,w){return s+w.done;},0);
+  var totalPossible=weeks.reduce(function(s,w){return s+w.tot;},0);
+  var globalPct=totalPossible?Math.round(totalDone/totalPossible*100):0;
+
+  // ── TOP STATS ──
+  var sc=document.createElement('div');sc.className='astats';
+  function mkC(v,l,c){var d=document.createElement('div');d.className='acard';var vv=document.createElement('div');vv.className='aval';vv.style.color=c||'#3b23a8';vv.textContent=v;var ll=document.createElement('div');ll.className='albl';ll.textContent=l;d.appendChild(vv);d.appendChild(ll);return d;}
+  sc.appendChild(mkC(globalPct+'%','TAUX GLOBAL'));
+  sc.appendChild(mkC(avgPct+'%','MOY. / SEM.'));
+  sc.appendChild(mkC(perfectWeeks+'/'+totalWeeks,'SEMAINES 100%','#005533'));
+  body.appendChild(sc);
+
+  var sc2=document.createElement('div');sc2.className='astats';
+  sc2.appendChild(mkC(bestStreak,'MEILLEUR STREAK'));
+  sc2.appendChild(mkC(streak,'STREAK ACTUEL'));
+  sc2.appendChild(mkC(Math.round(totalZ2/60)+'h','ZONE 2 TOTAL','#1a0870'));
+  body.appendChild(sc2);
+
+  // ── WEEKLY PCT HISTORY ──
+  var hl=document.createElement('div');hl.className='hlbl';hl.textContent='📅 % PAR SEMAINE';body.appendChild(hl);
+
+  weeks.forEach(function(w){
+    var sun=new Date(w.mon);sun.setDate(w.mon.getDate()+6);
+    var label=w.mon.getDate()+'/'+('0'+(w.mon.getMonth()+1)).slice(-2)+' → '+sun.getDate()+'/'+('0'+(sun.getMonth()+1)).slice(-2);
+    var isCur=w.mon.getTime()===curMon.getTime();
+
+    var row=document.createElement('div');
+    row.style.cssText='margin-bottom:4px;'+(isCur?'outline:2px solid #3b23a8;outline-offset:-1px;':'');
+
+    // label + pct
+    var top=document.createElement('div');
+    top.style.cssText='display:flex;justify-content:space-between;align-items:center;font-size:9px;margin-bottom:2px;';
+    var lspan=document.createElement('span');lspan.style.cssText='color:#555;letter-spacing:.5px;';lspan.textContent=label+(isCur?' ★':'');
+    var pspan=document.createElement('span');pspan.style.cssText='font-weight:700;color:'+(w.pct===100?'#005533':w.pct>=70?'#3b23a8':'#808080')+';';
+    pspan.textContent=w.pct+'% · '+w.done+'/'+w.tot;
+    top.appendChild(lspan);top.appendChild(pspan);
+
+    // mini bar
+    var barOut=document.createElement('div');
+    barOut.style.cssText='background:#a8a4a0;height:6px;border-top:1px solid #808080;border-left:1px solid #808080;border-right:1px solid #fff;border-bottom:1px solid #fff;overflow:hidden;';
+    var barIn=document.createElement('div');
+    barIn.style.cssText='height:100%;width:'+w.pct+'%;background:'+(w.pct===100?'linear-gradient(90deg,#005533,#00aa66)':'linear-gradient(90deg,#3b23a8,#6b5fd4)')+';transition:width .3s;';
+    barOut.appendChild(barIn);
+
+    // detail pills
+    var pills=document.createElement('div');
+    pills.style.cssText='display:flex;gap:4px;margin-top:3px;flex-wrap:wrap;';
+    function mkPill(txt,col,done){var p=document.createElement('span');p.style.cssText='font-size:7px;font-weight:700;letter-spacing:1px;padding:1px 5px;background:'+(done?col:'#ccc')+';color:'+(done?'#fff':'#888')+';';p.textContent=txt;pills.appendChild(p);}
+    mkPill('⚡'+w.halte+'/2','#c9a020',w.halte>0);
+    mkPill('💪'+w.force+'/3','#dd5522',w.force>0);
+    mkPill('🔥'+w.wods+'/2','#cc2200',w.wods>0);
+    mkPill('🔵'+w.z2+'min',w.z2>=180?'#005533':'#3b23a8',w.z2>0);
+
+    row.appendChild(top);row.appendChild(barOut);row.appendChild(pills);
+    body.appendChild(row);
+  });
+
+  // ── CONSISTENCY BY BLOCK TYPE ──
+  var hl2=document.createElement('div');hl2.className='hlbl';hl2.textContent='📈 RÉGULARITÉ PAR BLOC';body.appendChild(hl2);
+
+  var types=[
+    {id:'snatch',  lbl:'SNATCH',       col:'#c9a020'},
+    {id:'clean',   lbl:'CLEAN & JERK', col:'#c9a020'},
+    {id:'squat',   lbl:'SQUAT',        col:'#dd5522'},
+    {id:'press',   lbl:'BENCH/PRESS',  col:'#dd5522'},
+    {id:'deadlift',lbl:'DEADLIFT',     col:'#dd5522'},
+    {id:'wod1',    lbl:'WOD 1',        col:'#cc2200'},
+    {id:'wod2',    lbl:'WOD 2',        col:'#cc2200'},
+  ];
+  types.forEach(function(tp){
+    var done=weeks.filter(function(w){return isBlockDone(w.mon,tp.id);}).length;
+    var pct=totalWeeks?Math.round(done/totalWeeks*100):0;
+    var row=document.createElement('div');
+    row.style.cssText='display:flex;align-items:center;gap:8px;margin-bottom:5px;';
+    var lbl=document.createElement('span');lbl.style.cssText='font-size:8px;font-weight:700;letter-spacing:1px;width:90px;flex-shrink:0;color:#333;';lbl.textContent=tp.lbl;
+    var barOut=document.createElement('div');barOut.style.cssText='flex:1;background:#a8a4a0;height:8px;border-top:1px solid #808080;border-left:1px solid #808080;border-right:1px solid #fff;border-bottom:1px solid #fff;overflow:hidden;';
+    var barIn=document.createElement('div');barIn.style.cssText='height:100%;width:'+pct+'%;background:'+tp.col+';transition:width .3s;';
+    barOut.appendChild(barIn);
+    var pctSpan=document.createElement('span');pctSpan.style.cssText='font-size:9px;font-weight:700;color:'+tp.col+';width:36px;text-align:right;flex-shrink:0;';pctSpan.textContent=pct+'%';
+    row.appendChild(lbl);row.appendChild(barOut);row.appendChild(pctSpan);
+    body.appendChild(row);
+  });
+  // Zone 2 consistency
+  var z2weeks=weeks.filter(function(w){return w.z2>=180;}).length;
+  var z2pct=totalWeeks?Math.round(z2weeks/totalWeeks*100):0;
+  var zrow=document.createElement('div');zrow.style.cssText='display:flex;align-items:center;gap:8px;margin-bottom:5px;';
+  var zl=document.createElement('span');zl.style.cssText='font-size:8px;font-weight:700;letter-spacing:1px;width:90px;flex-shrink:0;color:#333;';zl.textContent='ZONE 2 (180min)';
+  var zbo=document.createElement('div');zbo.style.cssText='flex:1;background:#a8a4a0;height:8px;border-top:1px solid #808080;border-left:1px solid #808080;border-right:1px solid #fff;border-bottom:1px solid #fff;overflow:hidden;';
+  var zbi=document.createElement('div');zbi.style.cssText='height:100%;width:'+z2pct+'%;background:#3b23a8;transition:width .3s;';
+  zbo.appendChild(zbi);
+  var zps=document.createElement('span');zps.style.cssText='font-size:9px;font-weight:700;color:#3b23a8;width:36px;text-align:right;flex-shrink:0;';zps.textContent=z2pct+'%';
+  zrow.appendChild(zl);zrow.appendChild(zbo);zrow.appendChild(zps);
+  body.appendChild(zrow);
+
+  var btn=document.createElement('button');btn.className='mclose';btn.textContent='✕ FERMER';btn.onclick=closeModal;body.appendChild(btn);
+  document.getElementById('mOverlay').classList.remove('hidden');
+}
+
+
+var prType='kg';
+document.getElementById('drawerFab').onclick=function(){document.getElementById('drawerOverlay').classList.remove('hidden');renderPRList();};
 document.getElementById('drawerClose').onclick=function(){document.getElementById('drawerOverlay').classList.add('hidden');};
 document.getElementById('drawerOverlay').onclick=function(e){if(e.target===this)document.getElementById('drawerOverlay').classList.add('hidden');};
 function switchDTab(name){
-  document.querySelectorAll('.dtab').forEach(function(t,i){t.classList.toggle('active',['pr','pct','plates'][i]===name);});
+  document.querySelectorAll('.dtab').forEach(function(t,i){t.classList.toggle('active',['pr','pct','plates','pace'][i]===name);});
   document.querySelectorAll('.dtool').forEach(function(t){t.classList.toggle('active',t.id==='dtool-'+name);});
   if(name==='pr')renderPRList();
 }
 
-// PR
-var prType='kg';
-function setPrType(v){prType=v;document.querySelectorAll('#prTypeGroup .radio-btn').forEach(function(b){b.classList.toggle('active',b.dataset.val===v);});document.getElementById('prUnit').textContent={kg:'KG',reps:'REPS',time:'SEC'}[v];document.getElementById('prVal').step=v==='reps'?'1':'0.25';}
+// ── PR TOOL ──
+function setPrType(val){prType=val;document.querySelectorAll('#prTypeGroup .radio-btn').forEach(function(b){b.classList.toggle('active',b.dataset.val===val);});var u={kg:'KG',reps:'REPS',time:'SEC'};document.getElementById('prUnit').textContent=u[val];document.getElementById('prVal').step=val==='reps'?'1':'0.25';}
 function loadPRs(){try{var s=localStorage.getItem('hygie_prs');return s?JSON.parse(s):{};}catch(e){return {};}}
-function savePRs(p){try{localStorage.setItem('hygie_prs',JSON.stringify(p));}catch(e){}}
-function savePR(){
-  var name=document.getElementById('prName').value.trim().toUpperCase();
-  var val=parseFloat(document.getElementById('prVal').value);
-  if(!name||isNaN(val)||val<=0){alert('Mouvement et valeur requis.');return;}
-  var prs=loadPRs();var now=new Date();var ds=now.getDate()+'/'+(now.getMonth()+1)+'/'+now.getFullYear();
-  if(!prs[name])prs[name]={type:prType,history:[],best:0};
-  prs[name].history.unshift({val:val,date:ds,type:prType});
-  prs[name].history=prs[name].history.slice(0,20);
-  prs[name].best=prs[name].history.reduce(function(m,h){return h.val>m?h.val:m;},0);
-  prs[name].type=prType;savePRs(prs);
-  document.getElementById('prName').value='';document.getElementById('prVal').value='';renderPRList();
-}
+function savePRs(prs){try{localStorage.setItem('hygie_prs',JSON.stringify(prs));}catch(e){}}
+function savePR(){var name=document.getElementById('prName').value.trim().toUpperCase();var val=parseFloat(document.getElementById('prVal').value);if(!name||isNaN(val)||val<=0)return;var prs=loadPRs();var now=new Date();var ds=now.getDate()+'/'+(now.getMonth()+1)+'/'+now.getFullYear();if(!prs[name])prs[name]={type:prType,history:[],best:0};prs[name].history.unshift({val:val,date:ds,type:prType});prs[name].history=prs[name].history.slice(0,20);prs[name].best=prs[name].history.reduce(function(m,h){return h.val>m?h.val:m;},0);prs[name].type=prType;savePRs(prs);document.getElementById('prName').value='';document.getElementById('prVal').value='';renderPRList();}
 function toggleHist(id){var el=document.getElementById(id);if(el)el.classList.toggle('open');}
 function renderPRList(){
   var el=document.getElementById('prList');if(!el)return;
   var prs=loadPRs();var keys=Object.keys(prs);el.innerHTML='';
-  if(!keys.length){var e=document.createElement('div');e.style.cssText='font-size:10px;color:#aaa;text-align:center;padding:16px;';e.textContent='AUCUN PR ENREGISTRÉ';el.appendChild(e);return;}
+  if(!keys.length){el.innerHTML='<div style="font-size:10px;color:#aaa;text-align:center;padding:16px;letter-spacing:1px;">AUCUN PR</div>';return;}
   keys.forEach(function(name){
-    var pr=prs[name];var unit={kg:'kg',reps:'reps',time:'sec'}[pr.type]||'kg';
-    var latest=pr.history&&pr.history[0];var safeid='h'+name.replace(/[^a-z0-9]/gi,'_');
+    var pr=prs[name];var unit={kg:'kg',reps:'reps',time:'sec'}[pr.type]||'kg';var latest=pr.history&&pr.history[0];var safeid='h'+name.replace(/[^a-z0-9]/gi,'');
     var card=document.createElement('div');card.className='pr-item';
     var top=document.createElement('div');top.style.cssText='display:flex;align-items:center;justify-content:space-between;';
-    var info=document.createElement('div');
+    var inf=document.createElement('div');
     var nm=document.createElement('div');nm.className='pr-name';nm.textContent=(latest&&latest.val===pr.best?'🏆 ':'')+name;
     var dt=document.createElement('div');dt.className='pr-date';dt.textContent=latest?latest.date:'';
-    info.appendChild(nm);info.appendChild(dt);
-    var btns=document.createElement('div');btns.style.cssText='display:flex;align-items:center;gap:6px;flex-shrink:0;';
-    var valEl=document.createElement('span');valEl.className='pr-val';valEl.textContent=latest?(latest.val+' '+unit):'-';
-    var hBtn=document.createElement('button');hBtn.className='pr-hist-btn';hBtn.textContent='▼';hBtn.type='button';
-    (function(sid){hBtn.onclick=function(){toggleHist(sid);};})(safeid);
-    var dBtn=document.createElement('button');dBtn.className='pr-del';dBtn.textContent='✕';dBtn.type='button';
-    (function(n){dBtn.onclick=function(){var p=loadPRs();delete p[n];savePRs(p);renderPRList();};})(name);
-    btns.appendChild(valEl);btns.appendChild(hBtn);btns.appendChild(dBtn);
-    top.appendChild(info);top.appendChild(btns);card.appendChild(top);
+    inf.appendChild(nm);inf.appendChild(dt);
+    var btns=document.createElement('div');btns.style.cssText='display:flex;align-items:center;gap:6px;';
+    var ve=document.createElement('span');ve.className='pr-val';ve.textContent=latest?(latest.val+' '+unit):'-';
+    var hb=document.createElement('button');hb.className='pr-hist-btn';hb.textContent='▼';hb.type='button';(function(sid){hb.onclick=function(){toggleHist(sid);};})(safeid);
+    var db=document.createElement('button');db.className='pr-del';db.textContent='✕';db.type='button';(function(n){db.onclick=function(){var p2=loadPRs();delete p2[n];savePRs(p2);renderPRList();};})(name);
+    btns.appendChild(ve);btns.appendChild(hb);btns.appendChild(db);
+    top.appendChild(inf);top.appendChild(btns);card.appendChild(top);
     var hist=document.createElement('div');hist.className='pr-hist';hist.id=safeid;
-    (pr.history||[]).forEach(function(h,i){
-      var row=document.createElement('div');row.className='pr-hist-row';
-      var l=document.createElement('span');l.textContent=(i===0?'→ ':'  ')+h.val+' '+unit+(h.val===pr.best?' 🏆':'');
-      var r=document.createElement('span');r.textContent=h.date;row.appendChild(l);row.appendChild(r);hist.appendChild(row);
-    });
+    (pr.history||[]).forEach(function(h,i){var row=document.createElement('div');row.className='pr-hist-row';var l=document.createElement('span');l.textContent=(i===0?'→ ':'  ')+h.val+' '+unit+(h.val===pr.best?' 🏆':'');var r=document.createElement('span');r.textContent=h.date;row.appendChild(l);row.appendChild(r);hist.appendChild(row);});
     card.appendChild(hist);el.appendChild(card);
   });
 }
 
-// PCT
-function calcPct(){
-  var rm=parseFloat(document.getElementById('pctRM').value);var el=document.getElementById('pctResult');el.innerHTML='';
-  if(!rm||rm<=0)return;
-  var res=document.createElement('div');res.className='calc-result';
-  var title=document.createElement('div');title.className='calc-result-main';title.textContent='1RM = '+rm+' kg';res.appendChild(title);
-  var sub=document.createElement('div');sub.className='calc-result-sub';
-  [50,55,60,65,70,75,80,82,85,87,90,92,95,97,100].forEach(function(p){
-    var v=Math.round(rm*p/100*4)/4;
-    var line=document.createElement('div');line.style.cssText='display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid #ccc;';
-    var lbl=document.createElement('span');lbl.textContent=p+'%';
-    var val=document.createElement('strong');val.textContent=v+' kg';
-    line.appendChild(lbl);line.appendChild(val);sub.appendChild(line);
-  });
-  res.appendChild(sub);el.appendChild(res);
+// ── PCT ──
+function calcPct(){var rm=parseFloat(document.getElementById('pctRM').value);var el=document.getElementById('pctResult');el.innerHTML='';if(!rm||rm<=0)return;var res=document.createElement('div');res.className='calc-result';var t=document.createElement('div');t.className='calc-result-main';t.textContent='1RM = '+rm+' kg';res.appendChild(t);var s=document.createElement('div');s.className='calc-result-sub';[50,55,60,65,70,75,80,82,85,87,90,92,95,97,100].forEach(function(p){var v=Math.round(rm*p/100*4)/4;var line=document.createElement('div');line.style.cssText='display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid #ccc;';var ll=document.createElement('span');ll.textContent=p+'%';var vv=document.createElement('strong');vv.textContent=v+' kg';line.appendChild(ll);line.appendChild(vv);s.appendChild(line);});res.appendChild(s);el.appendChild(res);}
+
+// ── PLATES ──
+function calcPlates(){var target=parseFloat(document.getElementById('plTarget').value);var loaded=parseFloat(document.getElementById('plLoaded').value)||0;var el=document.getElementById('plResult');el.innerHTML='';if(!target||target<=0)return;if(target<loaded){el.style.color='#880000';el.textContent='Cible inférieure au poids actuel.';return;}var toAdd=Math.round((target-loaded)*1000)/1000;if(toAdd===0){el.innerHTML='<div class="calc-result"><div class="calc-result-main">Déjà chargé</div></div>';return;}var per=Math.round(toAdd/2*1000)/1000;var avail=[20,15,10,5,2.5,1,0.5,0.25];var plates=[];var rem=per;avail.forEach(function(p){while(rem>=p-0.001){plates.push(p);rem=Math.round((rem-p)*1000)/1000;}});var res=document.createElement('div');res.className='calc-result';var main=document.createElement('div');main.className='calc-result-main';if(rem>0.01){main.style.color='#880000';main.textContent='Impossible exactement';res.appendChild(main);el.appendChild(res);return;}main.textContent=(loaded+plates.reduce(function(s,p){return s+p;},0)*2)+' kg';res.appendChild(main);var info=document.createElement('div');info.className='calc-result-sub';info.textContent='PAR CÔTÉ :';res.appendChild(info);var vis=document.createElement('div');vis.className='plates-visual';var cols={20:'#3b23a8',15:'#5a1090',10:'#7a5500',5:'#550000',2.5:'#005533',1:'#444',0.5:'#666',0.25:'#888'};plates.forEach(function(p){var c=document.createElement('div');c.className='plate-chip';c.style.background=cols[p]||'#555';c.textContent=p;vis.appendChild(c);});res.appendChild(vis);var counts={};plates.forEach(function(p){counts[p]=(counts[p]||0)+1;});var sum=Object.keys(counts).sort(function(a,b){return b-a;}).map(function(p){return counts[p]+'×'+p+'kg';}).join(' + ');var note=document.createElement('div');note.className='plates-note';note.textContent=sum;res.appendChild(note);el.appendChild(res);}
+document.getElementById('plTarget').oninput=function(){if(this.value)calcPlates();};
+document.getElementById('plLoaded').oninput=function(){if(document.getElementById('plTarget').value)calcPlates();};
+document.getElementById('pctRM').oninput=function(){if(this.value)calcPct();};
+
+// ═══════════════════════════════════════════
+// PACE ENGINE
+// ═══════════════════════════════════════════
+function loadPaceStore(){try{return localStorage.getItem('hygie_pace')||'';}catch(e){return '';}}
+function savePaceStore(t){try{localStorage.setItem('hygie_pace',t);}catch(e){}}
+(function(){var s=loadPaceStore();if(s)document.getElementById('paceData').value=s;})();
+
+function parseTime(str){
+  if(!str)return null;str=str.trim().toLowerCase().replace(/\s+/g,'');
+  var hm=str.match(/^(\d+)h(?:(\d+)(?:min|m)?(?:(\d+)s?)?)?$/);if(hm){var t=parseInt(hm[1])*3600;if(hm[2])t+=parseInt(hm[2])*60;if(hm[3])t+=parseInt(hm[3]);return t;}
+  var ms=str.match(/^(\d+)min(?:(\d+)s?)?$/);if(ms){var t=parseInt(ms[1])*60;if(ms[2])t+=parseInt(ms[2]);return t;}
+  var ms2=str.match(/^(\d+)m(\d+)$/);if(ms2)return parseInt(ms2[1])*60+parseInt(ms2[2]);
+  var cs=str.match(/^(\d+):(\d+)(?::(\d+))?$/);if(cs){return cs[3]?parseInt(cs[1])*3600+parseInt(cs[2])*60+parseInt(cs[3]):parseInt(cs[1])*60+parseInt(cs[2]);}
+  var ns=str.match(/^(\d+)s$/);if(ns)return parseInt(ns[1]);
+  return null;
+}
+function fmtP500(s){s=Math.round(s);return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60+'/500m';}
+function fmtPKm(s){s=Math.round(s);return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60+'/km';}
+function fmtT(s){s=Math.round(s);if(s>=3600){var h=Math.floor(s/3600),m=Math.floor((s%3600)/60),ss=s%60;return h+'h'+(m<10?'0':'')+m+(ss>0?(ss<10?'0':'')+ss:'');}var m=Math.floor(s/60),ss=s%60;return m+'min'+(ss>0?(ss<10?'0':'')+ss:'');}
+
+var PACE_PAT=[
+  {key:'row2k',sport:'row',dist:2000,regex:/(?:(?:2\s*k(?:m)?|2000\s*m?)(?:\s*(?:row(?:er)?|rameur|aviron))?|(?:row(?:er)?|rameur|aviron)(?:\s*(?:2\s*k(?:m)?|2000\s*m?)))[^\d]*([\dh:minsSM]+)/i},
+  {key:'row500',sport:'row',dist:500,regex:/(?:(?:500\s*m?)(?:\s*(?:row(?:er)?|rameur|aviron))?|(?:row(?:er)?|rameur|aviron)(?:\s*500\s*m?))[^\d]*([\dh:minsSM]+)/i},
+  {key:'row1k',sport:'row',dist:1000,regex:/(?:(?:1\s*k(?:m)?|1000\s*m?)(?:\s*(?:row(?:er)?|rameur|aviron))|(?:row(?:er)?|rameur|aviron)(?:\s*(?:1\s*k(?:m)?|1000\s*m?)))[^\d]*([\dh:minsSM]+)/i},
+  {key:'row5k',sport:'row',dist:5000,regex:/(?:(?:5\s*k(?:m)?|5000\s*m?)(?:\s*(?:row(?:er)?|rameur|aviron))|(?:row(?:er)?|rameur|aviron)(?:\s*(?:5\s*k(?:m)?|5000\s*m?)))[^\d]*([\dh:minsSM]+)/i},
+  {key:'run5k',sport:'run',dist:5000,regex:/(?:(?:5\s*k(?:m)?|5000\s*m?)(?:\s*(?:run(?:ning)?|course|footing))?|(?:run(?:ning)?|course|footing)(?:\s*(?:5\s*k(?:m)?|5000\s*m?)))[^\d]*([\dh:minsSM]+)/i},
+  {key:'run10k',sport:'run',dist:10000,regex:/(?:(?:10\s*k(?:m)?|10000\s*m?)(?:\s*(?:run(?:ning)?|course|footing))?|(?:run(?:ning)?|course|footing)(?:\s*(?:10\s*k(?:m)?|10000\s*m?)))[^\d]*([\dh:minsSM]+)/i},
+  {key:'cooper',sport:'run',dist:null,type:'cooper',regex:/cooper(?:[^\d]+(?:test|12\s*min))?[^\d]*([\d.,]+)\s*m/i},
+  {key:'ftpbike',sport:'bike',dist:null,type:'ftp',regex:/(?:ftp|puissance\s*seuil)[^\d]*([\d]+)\s*w/i},
+];
+
+function parsePaceData(){
+  var txt=document.getElementById('paceData').value;savePaceStore(txt);
+  var el=document.getElementById('paceResult');el.innerHTML='';
+  var refs={};
+  PACE_PAT.forEach(function(p){var m=txt.match(p.regex);if(!m)return;var raw=m[1];var parsed=p.type==='cooper'?parseFloat(raw.replace(',','.')):p.type==='ftp'?parseFloat(raw):parseTime(raw);if(parsed&&parsed>0)refs[p.key]={val:parsed,meta:p};});
+  if(!Object.keys(refs).length){var e=document.createElement('div');e.className='pace-nodata';e.textContent='Format: "2km row 7min30" · "5km run 22min" · "FTP 220W"';el.appendChild(e);return;}
+  // ROW
+  var rRef=refs.row2k||refs.row500||refs.row1k||refs.row5k;
+  if(rRef){var p500;var rl,rt;if(refs.row2k){p500=refs.row2k.val/4;rl='2KM ROW';rt=fmtT(refs.row2k.val);}else if(refs.row500){p500=refs.row500.val;rl='500M ROW';rt=fmtP500(refs.row500.val);}else if(refs.row1k){p500=refs.row1k.val/2;rl='1KM ROW';rt=fmtT(refs.row1k.val);}else{p500=refs.row5k.val/10;rl='5KM ROW';rt=fmtT(refs.row5k.val);}
+  if(p500<90||p500>400){var w=document.createElement('div');w.className='pace-warn';w.textContent='⚠ Allure calculée ('+fmtP500(p500)+') semble incorrecte.';el.appendChild(w);}else el.appendChild(buildRowSec(p500,rl,rt));}
+  // RUN
+  var rSec5k=null;if(refs.run5k)rSec5k=refs.run5k.val;else if(refs.run10k)rSec5k=refs.run10k.val/2*1.07;else if(refs.cooper)rSec5k=(720/refs.cooper.val)*5000;
+  if(rSec5k){var pkm=rSec5k/5;var rl2=refs.run5k?'5KM RUN':refs.run10k?'10KM RUN':'COOPER';el.appendChild(buildRunSec(pkm,rl2,fmtT(rSec5k),refs.cooper?'Cooper: '+refs.cooper.val+'m · VO2max ≈'+Math.round(refs.cooper.val/35):null));}
+  // BIKE
+  if(refs.ftpbike)el.appendChild(buildBikeSec(refs.ftpbike.val));
 }
 
-// PLATES
-function calcPlates(){
-  var target=parseFloat(document.getElementById('plTarget').value);
-  var loaded=parseFloat(document.getElementById('plLoaded').value)||0;
-  var el=document.getElementById('plResult');el.innerHTML='';
-  if(!target||target<=0)return;
-  if(target<loaded&&loaded>0){el.style.cssText='font-size:10px;color:#880000;margin-top:8px;';el.textContent='Cible ('+target+'kg) < poids actuel ('+loaded+'kg).';return;}
-  var toAdd=Math.round((target-loaded)*1000)/1000;
-  if(toAdd===0){el.innerHTML='<div class="calc-result"><div class="calc-result-main">Rien à ajouter</div></div>';return;}
-  var perSide=Math.round(toAdd/2*1000)/1000;
-  var available=[20,15,10,5,2.5,1,0.5,0.25];var plates=[];var rem=perSide;
-  available.forEach(function(p){while(rem>=p-0.001){plates.push(p);rem=Math.round((rem-p)*1000)/1000;}});
-  var res=document.createElement('div');res.className='calc-result';res.style.marginTop='10px';
-  var main=document.createElement('div');main.className='calc-result-main';
-  if(rem>0.01){main.style.color='#880000';main.textContent='Impossible (manque '+rem+'kg/côté)';res.appendChild(main);el.appendChild(res);return;}
-  var finalW=loaded+plates.reduce(function(s,p){return s+p;},0)*2;
-  main.textContent=finalW+' kg';res.appendChild(main);
-  var info=document.createElement('div');info.className='calc-result-sub';
-  info.textContent=(loaded>0?'Actuellement '+loaded+' kg · ':'Barre vide · ')+'À AJOUTER PAR CÔTÉ :';res.appendChild(info);
-  var visual=document.createElement('div');visual.className='plates-visual';
-  var colors={20:'#3b23a8',15:'#5a1090',10:'#7a5500',5:'#550000',2.5:'#005533',1:'#444',0.5:'#666',0.25:'#888'};
-  plates.forEach(function(p){var chip=document.createElement('div');chip.className='plate-chip';chip.style.background=colors[p]||'#555';chip.textContent=p;visual.appendChild(chip);});
-  res.appendChild(visual);
-  var counts={};plates.forEach(function(p){counts[p]=(counts[p]||0)+1;});
-  var summary=Object.keys(counts).sort(function(a,b){return b-a;}).map(function(p){return counts[p]+'x'+p+'kg';}).join(' + ');
-  var note=document.createElement('div');note.className='plates-note';note.textContent='PAR COTE : '+summary;res.appendChild(note);
-  el.appendChild(res);
+function makeSportSec(title,color,ref){var s=document.createElement('div');s.className='pace-section';var hd=document.createElement('div');hd.className='pace-section-hd';hd.style.background='linear-gradient(90deg,'+color+','+color+'99)';var t=document.createElement('div');t.className='pace-section-title';t.textContent=title;var r=document.createElement('div');r.className='pace-section-ref';r.textContent=ref;hd.appendChild(t);hd.appendChild(r);s.appendChild(hd);return s;}
+function addPaceZone(sec,lbl,name,val,hl){var row=document.createElement('div');row.className='pace-zone'+(hl?' highlight':'');var left=document.createElement('div');var l=document.createElement('div');l.className='pace-zone-lbl';l.textContent=lbl;var n=document.createElement('div');n.className='pace-zone-name';n.textContent=name;left.appendChild(l);left.appendChild(n);var v=document.createElement('div');v.className='pace-zone-val'+(hl==2?' hl':'');v.textContent=val;var grid=sec.querySelector('.pace-zone-grid');row.appendChild(left);row.appendChild(v);grid.appendChild(row);}
+function addGrid(sec){var g=document.createElement('div');g.className='pace-zone-grid';sec.appendChild(g);return g;}
+function addSplits(sec,rows){var s=document.createElement('div');s.className='pace-splits';var t=document.createElement('div');t.className='pace-splits-title';t.textContent='TEMPS ESTIMÉS';s.appendChild(t);rows.forEach(function(r){var row=document.createElement('div');row.className='pace-split-row';var l=document.createElement('span');l.textContent=r[0];var v=document.createElement('b');v.textContent=r[1];row.appendChild(l);row.appendChild(v);s.appendChild(row);});sec.appendChild(s);}
+
+function buildRowSec(p500,rl,rt){
+  var sec=makeSportSec('🚣 ROWER','#005533',rl+' · '+rt);addGrid(sec);
+  var zones=[[{lbl:'ZONE 1',name:'Récupération',f:1.35},{lbl:'ZONE 2',name:'Endurance',range:[1.28,1.15]},{lbl:'ZONE 3',name:'Tempo',f:1.10},{lbl:'ZONE 4',name:'Seuil lactique',f:1.04},{lbl:'CIBLE',name:rl,f:1.0,hl:2},{lbl:'SPRINT',name:'500m max',f:0.88}]];
+  zones[0].forEach(function(z){var val=z.range?fmtP500(Math.round(p500*z.range[0]))+' → '+fmtP500(Math.round(p500*z.range[1])):fmtP500(Math.round(p500*z.f));addPaceZone(sec,z.lbl,z.name,val,z.hl||(!z.range&&z.lbl==='ZONE 2')||z.lbl==='CIBLE');});
+  addSplits(sec,[['500m',fmtT(Math.round(p500))],['1000m',fmtT(Math.round(p500*2*1.01))],['2000m',fmtT(Math.round(p500*4*1.02))],['5000m',fmtT(Math.round(p500*10*1.05))],['30min →',Math.round(30*60*500/p500)+'m'],['60min →',Math.round(60*60*500/p500)+'m']]);
+  return sec;
+}
+function buildRunSec(pkm,rl,rt,cooper){
+  var sec=makeSportSec('🏃 RUN','#550000',rl+' · '+rt);addGrid(sec);
+  var zones=[{lbl:'ZONE 1',name:'Footing récup',f:1.50},{lbl:'ZONE 2',name:'Endurance',range:[1.40,1.22]},{lbl:'TEMPO',name:'Allure tempo',f:1.14},{lbl:'SEUIL',name:'Seuil lactique',f:1.05},{lbl:'5KM',name:rl,f:1.0,hl:2},{lbl:'1KM',name:'Répétitions',f:0.94}];
+  zones.forEach(function(z){var val=z.range?fmtPKm(Math.round(pkm*z.range[0]))+' → '+fmtPKm(Math.round(pkm*z.range[1])):fmtPKm(Math.round(pkm*z.f));addPaceZone(sec,z.lbl,z.name,val,z.hl||z.lbl==='ZONE 2');});
+  var sp=[['1km',fmtT(Math.round(pkm*0.95))],['5km',fmtT(Math.round(pkm*5))],['10km',fmtT(Math.round(pkm*10*1.07))],['Semi',fmtT(Math.round(pkm*21.1*1.10))],['30min →',Math.round(30*60/pkm*1000)+'m']];
+  if(cooper)sp.unshift(['Cooper',cooper]);
+  addSplits(sec,sp);return sec;
+}
+function buildBikeSec(ftp){
+  var sec=makeSportSec('🚴 BIKEERG','#1a0870','FTP · '+ftp+'W');addGrid(sec);
+  [[0,55,'Z1','Récupération'],[55,75,'Z2','Endurance'],[75,90,'Z3','Tempo/Sweetspot'],[90,105,'Z4','Seuil (FTP)',true],[105,120,'Z5','VO2max'],[120,150,'Z6','Anaérobie']].forEach(function(z){addPaceZone(sec,z[2]+' · '+z[0]+'-'+z[1]+'%',z[3],Math.round(ftp*z[0]/100)+'W → '+Math.round(ftp*z[1]/100)+'W',z[4]?2:z[2]==='Z2');});
+  addSplits(sec,[['FTP (1h)',ftp+'W'],['Sweetspot',Math.round(ftp*.88)+'W → '+Math.round(ftp*.93)+'W'],['Zone 2',Math.round(ftp*.60)+'W → '+Math.round(ftp*.70)+'W'],['VO2max cible',Math.round(ftp*1.10)+'W → '+Math.round(ftp*1.15)+'W']]);return sec;
 }
 
-
-// INIT
-load();cur=new Date();cur.setHours(0,0,0,0);renderAll();
+// ─── INIT ───
+loadState();
+renderAll();
 </script>
 </body>
 </html>
